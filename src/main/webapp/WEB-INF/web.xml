@@ -3,8 +3,8 @@
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
-  <display-name>Archetype Created Web Application</display-name>
 
+  <display-name>Archetype Created Web Application</display-name>
 
   <servlet>
     <servlet-name>appServlet</servlet-name>
@@ -20,5 +20,32 @@
     <servlet-name>appServlet</servlet-name>
     <url-pattern>/</url-pattern>
   </servlet-mapping>
+
+  <!--Cross Origin Resource Sharing（跨域资源共享）-->
+  <filter>
+    <filter-name>corsFilter</filter-name>
+    <filter-class>com.lesso.common.filter.CorsFilter</filter-class>
+    <init-param>
+      <param-name>allowOrigin</param-name>
+      <param-value>*</param-value>
+    </init-param>
+    <init-param>
+      <param-name>allowMethods</param-name>
+      <param-value>GET,POST,PUT,DELETE,OPTIONS</param-value>
+    </init-param>
+    <init-param>
+      <param-name>allowCredentials</param-name>
+      <param-value>true</param-value>
+    </init-param>
+    <init-param>
+      <param-name>allowHeaders</param-name>
+      <param-value>Content-Type</param-value>
+    </init-param>
+  </filter>
+
+  <filter-mapping>
+    <filter-name>corsFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
 
 </web-app>

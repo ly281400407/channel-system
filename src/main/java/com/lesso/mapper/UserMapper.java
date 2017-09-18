@@ -1,8 +1,8 @@
-package com.lesso.dao;
+package com.lesso.mapper;
 
 import com.lesso.pojo.User;
 
-public interface UserDao {
+public interface UserMapper {
 
     public User get(Integer id);
 

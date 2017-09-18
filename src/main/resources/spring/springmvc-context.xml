@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
-             xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:p="http://www.springframework.org/schema/p"
-             xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
-        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd ">
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:context="http://www.springframework.org/schema/context"
+             xmlns:mvc="http://www.springframework.org/schema/mvc"
+             xmlns:p="http://www.springframework.org/schema/p"
+             xmlns:aop="http://www.springframework.org/schema/aop"
+             xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd ">
     <mvc:annotation-driven />
     <!-- ①：对web包中的所有类进行扫描，以完成Bean创建和自动依赖注入的功能 -->
     <context:component-scan base-package="com.lesso" />
@@ -22,4 +26,29 @@
         <beans:property name="suffix" value=".jsp" />
     </beans:bean>
 
+    <!-- Jackson的序列化行为进行定制，比如，排除值为空属性、进行缩进输出、将驼峰转为下划线、进行日期格式化等 -->
+    <beans:bean id="objectMapper" class="com.lesso.common.network.CustomObjectMapper" init-method="init">
+        <beans:property name="camelCaseToLowerCaseWithUnderscores" value="true"/>
+        <beans:property name="dateFormatPattern" value="yyyy-MM-dd HH:mm:ss"/>
+    </beans:bean>
+
+    <!-- Jackson来提供JSON的序列化操作 -->
+    <mvc:annotation-driven>
+        <mvc:message-converters>
+            <beans:bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <beans:bean id="tokenManager" class="com.lesso.common.security.DefaultTokenManager"/>
+
+    <beans:bean id="securityAspect" class="com.lesso.common.security.SecurityAspect">
+        <beans:property name="tokenManager" ref="tokenManager"/>
+        <beans:property name="tokenName" value="X-Token"/>
+    </beans:bean>
+
+    <aop:config>
+        <aop:aspect ref="securityAspect">
+            <aop:around method="execute" pointcut="@annotation(org.springframework.web.bind.annotation.RequestMapping)"/>
+        </aop:aspect>
+    </aop:config>
 </beans:beans>
