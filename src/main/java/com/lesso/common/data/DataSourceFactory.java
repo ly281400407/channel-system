@@ -33,7 +33,63 @@ public class DataSourceFactory {
 
     public int maxWait;
 
-    public DataSource createDataSource(){
+    public Map<String, String> getUrlproperties() {
+        return urlproperties;
+    }
+
+    public void setUrlproperties(Map<String, String> urlproperties) {
+        this.urlproperties = urlproperties;
+    }
+
+    public String getDirver() {
+        return dirver;
+    }
+
+    public void setDirver(String dirver) {
+        this.dirver = dirver;
+    }
+
+    public int getInitialSize() {
+        return initialSize;
+    }
+
+    public void setInitialSize(int initialSize) {
+        this.initialSize = initialSize;
+    }
+
+    public int getMaxActive() {
+        return maxActive;
+    }
+
+    public void setMaxActive(int maxActive) {
+        this.maxActive = maxActive;
+    }
+
+    public int getMaxIdle() {
+        return maxIdle;
+    }
+
+    public void setMaxIdle(int maxIdle) {
+        this.maxIdle = maxIdle;
+    }
+
+    public int getMinIdle() {
+        return minIdle;
+    }
+
+    public void setMinIdle(int minIdle) {
+        this.minIdle = minIdle;
+    }
+
+    public int getMaxWait() {
+        return maxWait;
+    }
+
+    public void setMaxWait(int maxWait) {
+        this.maxWait = maxWait;
+    }
+
+    public synchronized DataSource createDataSource(){
 
         BasicDataSource basicDataSource = new BasicDataSource();
         basicDataSource.setDriverClassName(dirver);
@@ -53,14 +109,16 @@ public class DataSourceFactory {
 
     private String createUrl(){
 
+        /*jdbc:mysql://139.199.62.80:2208/qudao?serverTimezone=GMT*/
         StringBuilder urlSb = new StringBuilder("");
-        urlSb.append("http://");
+        urlSb.append("jdbc:mysql://");
         urlSb.append(ip);
         urlSb.append(":");
         urlSb.append(port);
         urlSb.append("/");
         urlSb.append(dbName);
-        if(urlproperties.size()>0){
+        urlSb.append("?serverTimezone=GMT");
+/*        if(urlproperties.size()>0){
 
             urlSb.append("?");
             Iterator<String> it = urlproperties.keySet().iterator();
@@ -73,8 +131,8 @@ public class DataSourceFactory {
                 urlSb.append("&");
             }
             urlSb.deleteCharAt(urlSb.lastIndexOf("&"));
-        }
-        return null;
+        }*/
+        return urlSb.toString();
     }
 
 }

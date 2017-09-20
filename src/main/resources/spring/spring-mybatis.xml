@@ -38,7 +38,7 @@
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource" />
         <!-- 自动扫描mapping.xml文件 -->
-        <property name="mapperLocations" value="classpath:/mapper/*.xml"></property>
+        <property name="mapperLocations" value="classpath:/mapper/manager/*.xml"></property>
     </bean>
 
     <!-- DAO接口所在包名，Spring会自动查找其下的类 -->
@@ -46,6 +46,42 @@
         <property name="basePackage" value="com.lesso.mapper" />
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
     </bean>
+
+    <bean id="hashMap" class="java.util.HashMap">
+        <meta key="serverTimezone" value="GMT"/>
+    </bean>
+
+    <bean id="dataSourceFactory" class="com.lesso.common.data.DataSourceFactory">
+        <!-- 驱动 -->
+        <property name="dirver" value="${driver}"/>
+        <!-- 初始化连接大小 -->
+        <property name="initialSize" value="${initialSize}"></property>
+        <!-- 连接池最大数量 -->
+        <property name="maxActive" value="${maxActive}"></property>
+        <!-- 连接池最大空闲 -->
+        <property name="maxIdle" value="${maxIdle}"></property>
+        <!-- 连接池最小空闲 -->
+        <property name="minIdle" value="${minIdle}"></property>
+        <!-- 获取连接最大等待时间 -->
+        <property name="maxWait" value="${maxWait}"></property>
+
+        <property name="urlproperties" ref="hashMap"/>
+    </bean>
+
+    <bean id="sqlSessionPool" class="com.lesso.common.data.SqlSessionPool">
+        <property name="dataSourceFactory" ref="dataSourceFactory"/>
+        <property name="rootSqlSessionFactory" ref="sqlSessionFactory"/>
+        <property name="mapperLocations" value="classpath:/mapper/user/*.xml"/>
+    </bean>
+
+    <bean id="mapperFacade" class="com.lesso.common.data.MapperFacade">
+        <property name="sqlSessionPool" ref="sqlSessionPool"/>
+    </bean>
+
+
+
+
+
 
     <!-- (事务管理)transaction manager, use JtaTransactionManager for global tx -->
     <bean id="transactionManager"
