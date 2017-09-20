@@ -1,4 +1,4 @@
-package com.lesso.common.Exception;
+package com.lesso.common.exception;
 
 public class TokenException extends Exception{
 

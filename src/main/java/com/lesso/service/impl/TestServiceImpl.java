@@ -1,6 +1,6 @@
 package com.lesso.service.impl;
 
-import com.lesso.mapper.UserMapper;
+import com.lesso.mapper.user.UserMapper;
 import com.lesso.pojo.User;
 import com.lesso.service.TestService;
 import org.springframework.beans.factory.annotation.Autowired;

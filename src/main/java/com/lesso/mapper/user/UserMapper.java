@@ -1,4 +1,4 @@
-package com.lesso.mapper;
+package com.lesso.mapper.user;
 
 import com.lesso.pojo.User;
 

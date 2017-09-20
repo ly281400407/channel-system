@@ -1,8 +1,10 @@
 package com.lesso.control;
 
-import com.lesso.common.Exception.TokenException;
+import com.lesso.common.exception.TokenException;
 import com.lesso.common.security.IgnoreSecurity;
 import com.lesso.service.TestService;
+import org.apache.ibatis.session.SqlSession;
+import org.mybatis.spring.SqlSessionFactoryBean;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,6 +39,10 @@ public class TestController {
         stringRedisTemplate.expire("userid", 10000000, TimeUnit.MILLISECONDS);
         Long s = stringRedisTemplate.getExpire("userid");
         System.out.println(s);
+/*        SqlSessionFactoryBean sl ;
+        SqlSession sqlSession = sl.getObject();
+        sqlSession.getMapper();*/
+
         return "index";
     }
 

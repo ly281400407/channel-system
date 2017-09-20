@@ -1,6 +1,6 @@
 package com.lesso.common.security;
 
-import com.lesso.common.Exception.TokenException;
+import com.lesso.common.exception.TokenException;
 import com.lesso.common.util.StringUtil;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;

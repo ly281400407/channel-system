@@ -9,6 +9,9 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * 跨域问题解决
+ */
 public class CorsFilter implements Filter {
 
     private String allowOrigin;
