@@ -1,5 +1,6 @@
 package com.lesso.control;
 
+import com.lesso.common.Exception.TokenException;
 import com.lesso.common.security.IgnoreSecurity;
 import com.lesso.service.TestService;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -24,15 +25,16 @@ public class TestController {
     @Resource
     StringRedisTemplate stringRedisTemplate;
 
-    @IgnoreSecurity(val = false)
+    @IgnoreSecurity(val = true)
     @RequestMapping("/hello")
-    public String Save(HttpServletRequest request, HttpServletResponse response) { // user:视图层传给控制层的表单对象；model：控制层返回给视图层的对象
+    public String Save(HttpServletRequest request, HttpServletResponse response) throws TokenException { // user:视图层传给控制层的表单对象；model：控制层返回给视图层的对象
         System.out.println("hello word!");
         testService.testHello();
         //redisTemplate.opsForValue().set("userid","token",10000000, TimeUnit.MILLISECONDS);
         //redisTemplate.boundValueOps("userid").get();
-        stringRedisTemplate.opsForValue().set("userid1", "token");
-        stringRedisTemplate.expire("userid1", 10000000, TimeUnit.MILLISECONDS);
+        redisTemplate.delete("useid");
+        stringRedisTemplate.opsForValue().set("userid", "token");
+        stringRedisTemplate.expire("userid", 10000000, TimeUnit.MILLISECONDS);
         Long s = stringRedisTemplate.getExpire("userid");
         System.out.println(s);
         return "index";

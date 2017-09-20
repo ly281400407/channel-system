@@ -48,6 +48,7 @@
     <beans:bean id="securityAspect" class="com.lesso.common.security.SecurityAspect">
         <beans:property name="tokenManager" ref="tokenManager"/>
         <beans:property name="tokenName" value="X-Token"/>
+        <beans:property name="userName" value="X-User"/>
     </beans:bean>
 
     <aop:config>

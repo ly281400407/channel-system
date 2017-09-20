@@ -4,6 +4,7 @@ import com.lesso.common.Exception.TokenException;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.stereotype.Component;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -26,7 +27,7 @@ public class ExceptionAdvice {
     @ExceptionHandler(TokenException.class)
     public Response handleTokenException(TokenException e) {
         logger.error("token校验失败！", e);
-        return new Response().failure("taken_is_invalid");
+        return new Response().failure("token_is_invalid");
     }
 
     /**
