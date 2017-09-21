@@ -12,7 +12,6 @@ public class DefaultTokenManager implements TokenManager {
 
     public String createToken(String username) {
         String token = UUID.randomUUID().toString();
-
         tokenMap.put(token, username);
         return token;
     }

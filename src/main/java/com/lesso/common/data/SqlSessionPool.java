@@ -19,8 +19,6 @@ public class SqlSessionPool {
 
     private SqlSession rootSqlSession;
 
-    private SqlSessionFactory rootSqlSessionFactory;
-
     private Resource[] mapperLocations;
 
     public DataSourceFactory getDataSourceFactory() {
@@ -31,16 +29,7 @@ public class SqlSessionPool {
         this.dataSourceFactory = dataSourceFactory;
     }
 
-    public Map<String, SqlSession> getSqlSessionMap() {
-        return sqlSessionMap;
-    }
-
-    public void setSqlSessionMap(Map<String, SqlSession> sqlSessionMap) {
-        this.sqlSessionMap = sqlSessionMap;
-    }
-
     public void setRootSqlSessionFactory(SqlSessionFactory rootSqlSessionFactory) {
-        //this.rootSqlSessionFactory = rootSqlSessionFactory;
         this.rootSqlSession = rootSqlSessionFactory.openSession();
     }
 

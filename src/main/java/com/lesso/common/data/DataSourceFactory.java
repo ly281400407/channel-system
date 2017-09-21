@@ -2,6 +2,7 @@ package com.lesso.common.data;
 
 import org.apache.commons.dbcp.BasicDataSource;
 
+import javax.annotation.Resource;
 import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -9,7 +10,7 @@ import java.util.Map;
 
 public class DataSourceFactory {
 
-    public Map<String, String> urlproperties = new HashMap<String, String>();
+    public Map<String, String> urlProperties = new HashMap<String, String>();
 
     public String dirver;
 
@@ -33,56 +34,29 @@ public class DataSourceFactory {
 
     public int maxWait;
 
-    public Map<String, String> getUrlproperties() {
-        return urlproperties;
-    }
 
-    public void setUrlproperties(Map<String, String> urlproperties) {
-        this.urlproperties = urlproperties;
-    }
-
-    public String getDirver() {
-        return dirver;
+    public void setUrlProperties(Map<String, String> urlProperties) {
+        this.urlProperties = urlProperties;
     }
 
     public void setDirver(String dirver) {
         this.dirver = dirver;
     }
 
-    public int getInitialSize() {
-        return initialSize;
-    }
-
     public void setInitialSize(int initialSize) {
         this.initialSize = initialSize;
-    }
-
-    public int getMaxActive() {
-        return maxActive;
     }
 
     public void setMaxActive(int maxActive) {
         this.maxActive = maxActive;
     }
 
-    public int getMaxIdle() {
-        return maxIdle;
-    }
-
     public void setMaxIdle(int maxIdle) {
         this.maxIdle = maxIdle;
     }
 
-    public int getMinIdle() {
-        return minIdle;
-    }
-
     public void setMinIdle(int minIdle) {
         this.minIdle = minIdle;
-    }
-
-    public int getMaxWait() {
-        return maxWait;
     }
 
     public void setMaxWait(int maxWait) {
@@ -117,21 +91,20 @@ public class DataSourceFactory {
         urlSb.append(port);
         urlSb.append("/");
         urlSb.append(dbName);
-        urlSb.append("?serverTimezone=GMT");
-/*        if(urlproperties.size()>0){
-
+        //urlSb.append("?serverTimezone=GMT");
+        if(urlProperties.size()>0){
             urlSb.append("?");
-            Iterator<String> it = urlproperties.keySet().iterator();
+            Iterator<String> it = urlProperties.keySet().iterator();
             while (it.hasNext()){
                 String key = it.next();
-                String value = urlproperties.get(key);
+                String value = urlProperties.get(key);
                 urlSb.append(key);
                 urlSb.append("=");
                 urlSb.append(value);
                 urlSb.append("&");
             }
             urlSb.deleteCharAt(urlSb.lastIndexOf("&"));
-        }*/
+        }
         return urlSb.toString();
     }
 

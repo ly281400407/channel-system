@@ -2,6 +2,6 @@ package com.lesso.service;
 
 public interface TestService {
 
-    public String testHello();
+    public String testHello() throws Exception;
 
 }

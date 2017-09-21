@@ -3,12 +3,14 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                         http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
                         http://www.springframework.org/schema/context
                         http://www.springframework.org/schema/context/spring-context-4.2.xsd
                         http://www.springframework.org/schema/mvc
-                        http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd">
+                        http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd
+                        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
     <!-- 引入配置文件 -->
     <bean id="propertyConfigurer"
@@ -47,9 +49,9 @@
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
     </bean>
 
-    <bean id="hashMap" class="java.util.HashMap">
-        <meta key="serverTimezone" value="GMT"/>
-    </bean>
+    <util:map id="urlProperties" map-class="java.util.HashMap">
+        <entry key="serverTimezone" value="GMT"/>
+    </util:map>
 
     <bean id="dataSourceFactory" class="com.lesso.common.data.DataSourceFactory">
         <!-- 驱动 -->
@@ -65,7 +67,7 @@
         <!-- 获取连接最大等待时间 -->
         <property name="maxWait" value="${maxWait}"></property>
 
-        <property name="urlproperties" ref="hashMap"/>
+        <property name="urlProperties" ref="urlProperties"/>
     </bean>
 
     <bean id="sqlSessionPool" class="com.lesso.common.data.SqlSessionPool">
@@ -77,11 +79,6 @@
     <bean id="mapperFacade" class="com.lesso.common.data.MapperFacade">
         <property name="sqlSessionPool" ref="sqlSessionPool"/>
     </bean>
-
-
-
-
-
 
     <!-- (事务管理)transaction manager, use JtaTransactionManager for global tx -->
     <bean id="transactionManager"
