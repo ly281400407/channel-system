@@ -5,11 +5,18 @@ import com.lesso.mapper.manager.TenantInfoMapper;
 import com.lesso.pojo.TenantInfo;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 
 import javax.sql.DataSource;
 import java.beans.PropertyVetoException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class ComboPooledDataSourceFactory implements AbstractDataSourceFactory{
+
+    @Autowired
+    JdbcTemplate jdbcTemplate;
 
     @Autowired
     TenantInfoMapper tenantInfoMapper;
@@ -91,12 +98,24 @@ public class ComboPooledDataSourceFactory implements AbstractDataSourceFactory{
 
         try {
 
-            String tenantAccount = (String) o;
-            TenantInfo tenantInfo = tenantInfoMapper.getTenantInfo(tenantAccount);
+            final String tenantAccount = (String) o;
+            //TenantInfo tenantInfo = tenantInfoMapper.getTenantInfo(tenantAccount);
+            TenantInfo tenantInfo =  jdbcTemplate.queryForObject("select * from QDTenantInfo where tenant_Account = '" + tenantAccount + "'", new RowMapper<TenantInfo>() {
+                @Override
+                public TenantInfo mapRow(ResultSet resultSet, int i) throws SQLException {
+                    TenantInfo tenantInfo = new TenantInfo();
+                    tenantInfo.setDbPassword(resultSet.getString("dbPassword"));
+                    tenantInfo.setDbName(resultSet.getString("dbName"));
+                    tenantInfo.setDbAccount(resultSet.getString("db_Account"));
+                    tenantInfo.setServerIp(resultSet.getString("serverIp"));
+                    tenantInfo.setServerPort(resultSet.getInt("servertPort"));
+                    return tenantInfo;
+                }
+            });
 
             comboPooledDataSource = new ComboPooledDataSource();
             comboPooledDataSource.setPassword(tenantInfo.getDbPassword());
-            comboPooledDataSource.setUser(tenantInfo.getDbPassword());
+            comboPooledDataSource.setUser(tenantInfo.getDbAccount());
             comboPooledDataSource.setDriverClass(driverClassName);
             comboPooledDataSource.setInitialPoolSize(initialPoolSize);
             comboPooledDataSource.setMinPoolSize(minPoolSize);
@@ -105,7 +124,8 @@ public class ComboPooledDataSourceFactory implements AbstractDataSourceFactory{
             comboPooledDataSource.setMaxIdleTime(maxIdleTime);
             comboPooledDataSource.setAcquireRetryAttempts(acquireRetryAttempts);
             comboPooledDataSource.setAcquireRetryDelay(acquireRetryDelay);
-
+            String jdbcUrl = this.createJdbcUrl(tenantInfo);
+            comboPooledDataSource.setJdbcUrl(jdbcUrl);
         } catch (PropertyVetoException e) {
             e.printStackTrace();
         }

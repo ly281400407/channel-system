@@ -1,5 +1,6 @@
 package com.lesso.common.db;
 
+import com.lesso.common.util.StringUtil;
 import org.apache.log4j.Logger;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
@@ -31,21 +32,22 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
     @Override
     protected DataSource determineTargetDataSource() {
         // 根据数据库选择方案，拿到要访问的数据库
-        String daName = determineCurrentLookupKey();
+        String dbName = determineCurrentLookupKey();
+
+        if(StringUtil.isEmpty(dbName)){
+            return masterDataSource;
+        }
 
         // 根据数据库名字，从已创建的数据库中获取要访问的数据库
-        DataSource dataSource = (DataSource) targetDataSource.get(daName);
+        DataSource dataSource = (DataSource) targetDataSource.get(dbName);
 
         //如果没有对应数据源 则创建一个对应的数据源
         if(null == dataSource){
-            dataSource = createDataSource(daName);
-        }
-        if(dataSource == null || daName == null) {
-            dataSource = this.masterDataSource;
+            dataSource = createDataSource(dbName);
         }
 
         if(dataSource == null) {
-            throw new IllegalStateException("Cannot determine target DataSource for lookup daName [" + daName + "]");
+            throw new IllegalStateException("Cannot determine target DataSource for lookup daName [" + dbName + "]");
         } else {
             return dataSource;
         }
@@ -75,88 +77,11 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
      */
     private DataSource createDataSource(String dbName){
         DataSource dataSource = dataSourceFactory.createDataSource(dbName);
-        return dataSource;
-    }
-
-/*
-    *//**
-     * 该方法为同步方法，防止并发创建两个相同的数据库
-     * 使用双检锁的方式，防止并发
-     * @param dbType
-     * @return
-     *//*
-    private synchronized DataSource selectDataSource(String dbType){
-        // 再次从数据库中获取，双检锁
-        DataSource obj = (DataSource)this.targetDataSource.get(dbType);
-        if (null != obj) {
-            return obj;
-        }
-        // 为空则创建数据库
-        DataSource dataSource = this.getDataSource(dbType);
-        if (null != dataSource) {
-            // 将新创建的数据库保存到map中
-            this.setDataSource(dbType, dataSource);
-            return dataSource;
-        }else {
-            throw new IllegalStateException("Cannot determine target DataSource for lookup key [" + dbType + "]");
-        }
-    }
-
-    *//**
-     * 从主数据库查询对应数据库的信息
-     * @param dbtype
-     * @return
-     *//*
-    private DataSource getDataSource(String dbtype) {
-        String oriType = DataSourceHolder.getDataSource();
-        // 先切换回主库
-        DataSourceHolder.setDataSource("dataSource");
-        // 查询所需信息
-*//*        DataBaseInfo datebase = centerDatebaseManager.getById(dbtype);*//*
-        DataBaseInfo datebase=new DataBaseInfo();
-        // 切换回目标库
-        DataSourceHolder.setDataSource(oriType);
-
-        DataSource dataSource = createDataSource(datebase.getUrl(),datebase.getUserName(),datebase.getPassword());
-        return dataSource;
-    }
-
-
-    //创建SQLServer数据源
-    private DataSource createDataSource(String url, String userName, String password) {
-        return createDataSource("com.mysql.jdbc.Driver", url, userName, password);
-    }
-
-    //创建数据源
-    private DataSource createDataSource(String driverClassName, String jdbcUrl,
-                                             String username, String password){
-        ComboPooledDataSource dataSource = null;
-        try {
-            dataSource = new ComboPooledDataSource();
-            dataSource.setDriverClass(driverClassName);
-            dataSource.setJdbcUrl(jdbcUrl);
-            dataSource.setUser(username);
-            dataSource.setPassword(password);
-        } catch (PropertyVetoException e) {
-            log.error(e.getMessage());
+        if(null!= dataSource) {
+            setDataSource(dbName, dataSource);
         }
         return dataSource;
     }
-    public synchronized DataSource addDataSource(DataBaseInfo dataBaseInfo){
-        DataSource obj = (DataSource)this.targetDataSource.get(dataBaseInfo.getDbKey());
-        if (null != obj) {
-            return obj;
-        }
-        // 为空则创建数据库
-        DataSource dataSource = createDataSource(dataBaseInfo.getUrl(),dataBaseInfo.getUserName(),dataBaseInfo.getPassword());
-        if (null != dataSource) {
-            // 将新创建的数据库保存到map中
-            this.addTargetDataSource(dataBaseInfo.getDbKey(),dataSource);
-            return dataSource;
-        }else {
-            throw new IllegalStateException("Cannot determine target DataSource for lookup key [" + dataBaseInfo.getDbKey() + "]");
-        }
-    }*/
 
     public synchronized void removeDataSource(DataBaseInfo dataBaseInfo){
       this.removeTargetDataSource(dataBaseInfo.getDbKey());
@@ -181,7 +106,7 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
      */
     @Override
     public void afterPropertiesSet() {
-        if(this.targetDataSources != null) {
+/*        if(this.targetDataSources != null) {
             Iterator var1 = this.targetDataSources.entrySet().iterator();
             while(var1.hasNext()) {
                 Map.Entry entry = (Map.Entry)var1.next();
@@ -189,7 +114,7 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
                 DataSource dataSource = this.resolveSpecifiedDataSource(entry.getValue());
                 this.targetDataSource.put(lookupKey, dataSource);
             }
-        }
+        }*/
     }
 
     public DataSource getMasterDataSource() {

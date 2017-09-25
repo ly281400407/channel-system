@@ -5,7 +5,7 @@ package com.lesso.common.db;
  */
 public class DataSourceHolder {
 
-    private static String defaultDataSourceName = "dbmanager";
+//    private static String defaultDataSourceName = "dbmanager";
 
     //线程本地环境
     private static final ThreadLocal<String> dataSourceName = new ThreadLocal<String>();
@@ -17,10 +17,10 @@ public class DataSourceHolder {
 
     //获取数据源
     public static String getDataSource() {
-        if(null==dataSourceName.get()){
+/*        if(null==dataSourceName.get()){
             dataSourceName.set(defaultDataSourceName);
-        }
-        return (String) dataSourceName.get();
+        }*/
+        return dataSourceName.get();
     }
 
     //清除数据源

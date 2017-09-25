@@ -28,7 +28,7 @@ public class TestController {
     @RequestMapping("/testForMain")
     public String testForMain(HttpServletRequest request, HttpServletResponse response) throws Exception {
         System.out.println("hello word!");
-        TenantInfo tenantInfo = testService.getTenantInfo("");
+        TenantInfo tenantInfo = testService.getTenantInfo("liyou_001");
         return "index";
     }
 
