@@ -2,10 +2,58 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.lesso.mapper.user.UserMapper">
+<mapper namespace="com.lesso.mapper.UserMapper">
 
     <select id="get" resultType="com.lesso.pojo.User">
         select * from t_user where id = #{id}
     </select>
+
+    <select id="getList" resultType="com.lesso.pojo.User">
+        select * from t_user where name like #{searchText} and tenant_id = #{tenantId}
+    </select>
+
+    <select id="getUserInfo" resultType="com.lesso.pojo.User">
+        select * from t_user where name = #{name}  and password = #{password}
+    </select>
+
+    <insert id="insertUser" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_user (
+        name,
+        password,
+        sex,
+        company,
+        tenant_id)
+        VALUES (
+        #{name},
+        #{password},
+        #{sex},
+        #{companyName},
+        #{tenantId}
+        )
+    </insert>
+
+    <update id="executeCreateQuery" parameterType="map">
+        ${sql}
+    </update>
+
+    <insert id="insertUserByTableIndex" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_user${tableIndex} (
+        name,
+        password,
+        sex,
+        company,
+        tenant_id)
+        VALUES (
+        #{name},
+        #{password},
+        #{sex},
+        #{companyName},
+        #{tenantId}
+        )
+    </insert>
+    <select id="getUserByTableIndex" resultType="com.lesso.pojo.User">
+        select * from t_user${tableIndex} where name like #{searchText} and tenant_id = #{tenantId}
+    </select>
+
 
 </mapper>

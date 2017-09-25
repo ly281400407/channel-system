@@ -1,36 +1,33 @@
 package com.lesso.pojo;
 
+/**
+ * Created by czx on 2017/9/21.
+ */
 public class TenantInfo {
+    private Integer id;
+    private String tenantAccount;
+    private String tenantPassword;
+    private String serverIp;
+    private int serverPort;
+    private String dbName;
+    private String dbPassword;
+    private String companyName;
+    private String phoneNo;
+    private String dbAccount;
 
-    public int id;
+    public String getDbAccount() {
+        return dbAccount;
+    }
 
-    public String tenantAccount;
+    public void setDbAccount(String dbAccount) {
+        this.dbAccount = dbAccount;
+    }
 
-    public String tenantPassword;
-
-    public String serverIp;
-
-    public String servertPort;
-
-    public String dbName;
-
-    public String dbPassword;
-
-    public String companyName;
-
-    public int status;
-
-    public int created;
-
-    public int updated;
-
-    public String phoneNo;
-
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -58,12 +55,13 @@ public class TenantInfo {
         this.serverIp = serverIp;
     }
 
-    public String getServertPort() {
-        return servertPort;
+
+    public int getServerPort() {
+        return serverPort;
     }
 
-    public void setServertPort(String servertPort) {
-        this.servertPort = servertPort;
+    public void setServerPort(int serverPort) {
+        this.serverPort = serverPort;
     }
 
     public String getDbName() {
@@ -88,30 +86,6 @@ public class TenantInfo {
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    public int getCreated() {
-        return created;
-    }
-
-    public void setCreated(int created) {
-        this.created = created;
-    }
-
-    public int getUpdated() {
-        return updated;
-    }
-
-    public void setUpdated(int updated) {
-        this.updated = updated;
     }
 
     public String getPhoneNo() {

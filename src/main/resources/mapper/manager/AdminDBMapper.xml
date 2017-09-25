@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lesso.mapper.ServerInfoMapper">
+
+    <select id="get" resultType="com.lesso.pojo.ServerInfo">
+        select * from QDServerInfo where id = #{id}
+    </select>
+
+    <select id="getRegisterServerInfo" resultType="com.lesso.pojo.ServerInfo">
+     select * from QDServerInfo t where tenant_maxcount>tenant_curcount order by tenant_curcount
+    </select>
+
+    <select id="getUserDBInfo" resultType="com.lesso.pojo.TenantInfo">
+        select id,tenant_Account as tenantAccount,tenantPassword,serverIp,servertPort as serverPort,dbName,db_Account as dbAccount,dbPassword,companyName,phoneNo
+        from QDTenantInfo t where companyName= #{companyName}
+    </select>
+
+    <select id="getUserInfo" resultType="com.lesso.pojo.TenantInfo">
+        select id,tenant_Account as tenantAccount,tenantPassword,serverIp,servertPort as serverPort,dbName,db_Account as dbAccount,dbPassword,companyName,phoneNo
+        from QDTenantInfo t where tenant_Account= #{tenantAccount}  and tenantPassword = #{tenantPassword}
+    </select>
+
+    <select id="getAllUser" resultType="com.lesso.pojo.TenantInfo">
+        select id,tenant_Account as tenantAccount,tenantPassword,serverIp,servertPort as serverPort,dbName,db_Account as dbAccount,dbPassword,companyName,phoneNo
+        from QDTenantInfo t
+    </select>
+
+    <insert id="insertUser" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO QDTenantInfo (
+        tenant_Account,
+        tenantPassword,
+        serverIp,
+        servertPort,
+        dbName,
+        db_Account,
+        dbPassword,
+        companyName,
+        phoneNo)
+        VALUES   (
+        #{tenantAccount},
+        #{tenantPassword},
+        #{serverIp},
+        #{serverPort},
+        #{dbName},
+        #{dbAccount},
+        #{dbPassword},
+        #{companyName},
+        #{phoneNo}
+        )
+    </insert>
+
+
+
+    <update id="updateQDServerInfo">
+        UPDATE QDServerInfo
+        SET tenant_curcount= tenant_curcount+1
+        WHERE serverIp = #{serverIp};
+    </update>
+
+
+    <update id="executeCreateQuery" parameterType="map">
+        ${sql}
+    </update>
+
+
+</mapper>

@@ -2,12 +2,13 @@ package com.lesso.common.data;
 
 import com.lesso.mapper.manager.TenantInfoMapper;
 import com.lesso.pojo.TenantInfo;
-import org.apache.commons.dbcp.BasicDataSource;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.springframework.core.io.Resource;
 
+import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,12 +57,12 @@ public class SqlSessionPool {
         TenantInfoMapper tenantInfoMapper =rootSqlSession.getMapper(TenantInfoMapper.class);
         TenantInfo tenantInfo = tenantInfoMapper.getTenantInfo(id);
 
-        dataSourceFactory.username = tenantInfo.dbName;
+/*        dataSourceFactory.username = tenantInfo.dbName;
         dataSourceFactory.password = tenantInfo.dbPassword;
         dataSourceFactory.ip = tenantInfo.serverIp;
         dataSourceFactory.port = tenantInfo.servertPort;
-        dataSourceFactory.dbName = tenantInfo.dbName;
-        BasicDataSource dataSource = (BasicDataSource) dataSourceFactory.createDataSource();
+        dataSourceFactory.dbName = tenantInfo.dbName;*/
+        DataSource dataSource = (ComboPooledDataSource) dataSourceFactory.createDataSource();
 
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
         sqlSessionFactoryBean.setDataSource(dataSource);

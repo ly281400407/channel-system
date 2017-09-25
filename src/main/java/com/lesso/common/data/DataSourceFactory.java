@@ -1,8 +1,6 @@
 package com.lesso.common.data;
 
-import org.apache.commons.dbcp.BasicDataSource;
-
-import javax.annotation.Resource;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -65,18 +63,18 @@ public class DataSourceFactory {
 
     public synchronized DataSource createDataSource(){
 
-        BasicDataSource basicDataSource = new BasicDataSource();
-        basicDataSource.setDriverClassName(dirver);
+        DataSource basicDataSource = new ComboPooledDataSource();
+/*        basicDataSource.setDriverClassName(dirver);
         basicDataSource.setUsername(username);
         basicDataSource.setPassword(password);
         basicDataSource.setInitialSize(initialSize);
         basicDataSource.setMaxActive(maxActive);
         basicDataSource.setMaxIdle(maxIdle);
         basicDataSource.setMinIdle(minIdle);
-        basicDataSource.setMaxWait(maxWait);
+        basicDataSource.setMaxWait(maxWait);*/
 
-        String url = createUrl();
-        basicDataSource.setUrl(url);
+/*        String url = createUrl();
+        basicDataSource.setUrl(url);*/
 
         return basicDataSource;
     }

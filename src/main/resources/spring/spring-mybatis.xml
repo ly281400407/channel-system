@@ -13,29 +13,62 @@
     </bean>
 
     <!--主库数据源-->
-    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
-          destroy-method="close">
-        <property name="driverClassName" value="${driver}" />
-        <property name="url" value="${url}" />
-        <property name="username" value="${username}" />
-        <property name="password" value="${password}" />
-        <!-- 初始化连接大小 -->
-        <property name="initialSize" value="${initialSize}"></property>
-        <!-- 连接池最大数量 -->
-        <property name="maxActive" value="${maxActive}"></property>
-        <!-- 连接池最大空闲 -->
-        <property name="maxIdle" value="${maxIdle}"></property>
-        <!-- 连接池最小空闲 -->
-        <property name="minIdle" value="${minIdle}"></property>
-        <!-- 获取连接最大等待时间 -->
-        <property name="maxWait" value="${maxWait}"></property>
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+
+        <property name="driverClass" value="${jdbc.driverClass}" />
+
+        <property name="jdbcUrl" value="${jdbc.jdbcUrl}" />
+
+        <property name="user" value="${jdbc.user}" />
+
+        <property name="password" value="${jdbc.password}" />
+
+        <property name="initialPoolSize" value="${jdbc.initialPoolSize}"/>
+
+        <property name="maxPoolSize" value="${jdbc.maxPoolSize}"/>
+
+        <property name="maxIdleTime" value="${jdbc.maxIdleTime}"/>
+
+        <property name="acquireIncrement" value="${jdbc.acquireIncrement}"/>
+
+        <property name="acquireRetryAttempts" value="${jdbc.acquireRetryAttempts}"/>
+
+        <property name="acquireRetryDelay" value="${jdbc.acquireRetryDelay}"/>
+
+    </bean>
+
+    <bean id="multipleDataSource"  class="com.lesso.common.db.DynamicDataSource">
+        <property name="dataSourceFactory" ref="dataSourceFactory"/>
+        <property name="masterDataSource" ref="dataSource"/>
+    </bean>
+
+    <!--数据源工厂-->
+    <bean id="dataSourceFactory" class="com.lesso.common.db.ComboPooledDataSourceFactory">
+
+        <property name="driverClassName" value="${jdbc.driverClass}"/>
+
+        <property name="jdbcUrlPrefix" value="${jdbc.jdbcUrlPrefix}"/>
+
+        <property name="jdbcUrlSuffix" value="${jdbc.jdbcUrlSuffix}"/>
+
+        <property name="initialPoolSize" value="${jdbc.initialPoolSize}"/>
+
+        <property name="maxPoolSize" value="${jdbc.maxPoolSize}"/>
+
+        <property name="maxIdleTime" value="${jdbc.maxIdleTime}"/>
+
+        <property name="acquireIncrement" value="${jdbc.acquireIncrement}"/>
+
+        <property name="acquireRetryAttempts" value="${jdbc.acquireRetryAttempts}"/>
+
+        <property name="acquireRetryDelay" value="${jdbc.acquireRetryDelay}"/>
     </bean>
 
     <!-- spring和MyBatis完美整合，不需要mybatis的配置映射文件 -->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-        <property name="dataSource" ref="dataSource" />
+        <property name="dataSource" ref="multipleDataSource" />
         <!-- 自动扫描mapping.xml文件 -->
-        <property name="mapperLocations" value="classpath:/mapper/manager/*.xml"></property>
+        <property name="mapperLocations" value="classpath:/mapper/manager/*.xml,/mapper/user/*.xml"></property>
     </bean>
 
     <!-- 连接url参数 -->
@@ -46,39 +79,45 @@
     </util:map>
 
     <!---数据源创建工厂-->
-    <bean id="dataSourceFactory" class="com.lesso.common.data.DataSourceFactory">
-        <!-- 驱动 -->
+<!--    <bean id="dataSourceFactory" class="com.lesso.common.data.DataSourceFactory">
+        &lt;!&ndash; 驱动 &ndash;&gt;
         <property name="dirver" value="${driver}"/>
-        <!-- 初始化连接大小 -->
+        &lt;!&ndash; 初始化连接大小 &ndash;&gt;
         <property name="initialSize" value="${initialSize}"></property>
-        <!-- 连接池最大数量 -->
+        &lt;!&ndash; 连接池最大数量 &ndash;&gt;
         <property name="maxActive" value="${maxActive}"></property>
-        <!-- 连接池最大空闲 -->
+        &lt;!&ndash; 连接池最大空闲 &ndash;&gt;
         <property name="maxIdle" value="${maxIdle}"></property>
-        <!-- 连接池最小空闲 -->
+        &lt;!&ndash; 连接池最小空闲 &ndash;&gt;
         <property name="minIdle" value="${minIdle}"></property>
-        <!-- 获取连接最大等待时间 -->
+        &lt;!&ndash; 获取连接最大等待时间 &ndash;&gt;
         <property name="maxWait" value="${maxWait}"></property>
-        <!-- 连接url参数 -->
+        &lt;!&ndash; 连接url参数 &ndash;&gt;
         <property name="urlProperties" ref="urlProperties"/>
-    </bean>
+    </bean>-->
 
     <!--数据回话池，根据用户提供数据会话池-->
-    <bean id="sqlSessionPool" class="com.lesso.common.data.SqlSessionPool">
+<!--    <bean id="sqlSessionPool" class="com.lesso.common.data.SqlSessionPool">
         <property name="dataSourceFactory" ref="dataSourceFactory"/>
         <property name="rootSqlSessionFactory" ref="sqlSessionFactory"/>
         <property name="mapperLocations" value="classpath:/mapper/user/*.xml"/>
-    </bean>
+    </bean>-->
 
     <!-- mapperFacade 为用户提供对应的Mapper-->
-    <bean id="mapperFacade" class="com.lesso.common.data.MapperFacade">
+<!--    <bean id="mapperFacade" class="com.lesso.common.data.MapperFacade">
         <property name="sqlSessionPool" ref="sqlSessionPool"/>
+    </bean>-->
+
+    <!-- DAO接口所在包名，Spring会自动查找其下的类 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.lesso.mapper" />
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
     </bean>
 
     <!-- (事务管理)transaction manager, use JtaTransactionManager for global tx -->
     <bean id="transactionManager"
           class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="dataSource" />
+        <property name="dataSource" ref="multipleDataSource" />
     </bean>
 
 </beans>
