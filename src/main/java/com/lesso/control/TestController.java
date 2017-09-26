@@ -2,6 +2,7 @@ package com.lesso.control;
 
 import com.lesso.common.db.DataSourceHolder;
 import com.lesso.common.exception.TokenException;
+import com.lesso.common.network.Response;
 import com.lesso.common.security.IgnoreSecurity;
 import com.lesso.pojo.Finance;
 import com.lesso.pojo.TenantInfo;
@@ -10,13 +11,16 @@ import com.lesso.service.TestService;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -25,16 +29,34 @@ public class TestController {
     @Resource
     TestService testService;
 
-    @Resource
-    RedisTemplate redisTemplate;
-
-    @Resource
-    StringRedisTemplate stringRedisTemplate;
-
     @IgnoreSecurity(val = true)
-    @RequestMapping("/loginOfTenantPage")
-    public String loginOfTenantPage(){
-        return "loginOfTenant";
+    @RequestMapping(value = "/loginOfTenantPage",method = RequestMethod.GET)
+    public Response loginOfTenantPage(){
+
+        Response response = new Response();
+        User user = new User();
+        user.setTenantId(111);
+        user.setDbName("12131231");
+        user.setName("12321312");
+        user.setSearchText("test");
+        Map<String, Object> result = new HashMap<String, Object>();
+        result.put("user", user);
+        result.put("list1",new ArrayList<String>());
+        List<String> list = new ArrayList<String>();
+        list.add("1");
+        list.add("2");
+        result.put("list2", list);
+        String[] args = new String[0];
+        String[] args2 = new String[2];
+        args2[0] = "1";
+        args2[1] = "2";
+        String[] args3 = new String[2];
+        result.put("args", args);
+        result.put("args2", args2);
+        result.put("args3", args3);
+        response.success(result);
+
+        return response;
     }
 
     @IgnoreSecurity(val = true)
@@ -76,7 +98,7 @@ public class TestController {
 
 
     @IgnoreSecurity(val = true)
-    @RequestMapping("/test")
+    @RequestMapping(value = "/test")
     @ResponseBody
     public User test(HttpServletRequest request, HttpServletResponse response) throws TokenException {
         String dataType=request.getParameter("dataType");
