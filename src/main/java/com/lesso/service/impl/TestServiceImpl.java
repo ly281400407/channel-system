@@ -1,9 +1,7 @@
 package com.lesso.service.impl;
 
-import com.lesso.common.util.SpringContextUtil;
 import com.lesso.common.db.DataBaseInfo;
 import com.lesso.common.db.DataSourceHolder;
-import com.lesso.common.db.DynamicDataSource;
 import com.lesso.mapper.manager.FinanceMapper;
 import com.lesso.mapper.manager.ServerInfoMapper;
 import com.lesso.mapper.manager.TenantInfoMapper;

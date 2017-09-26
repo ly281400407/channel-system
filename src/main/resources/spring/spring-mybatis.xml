@@ -14,57 +14,38 @@
 
     <!--主库数据源-->
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
-
         <property name="driverClass" value="${jdbc.driverClass}" />
-
         <property name="jdbcUrl" value="${jdbc.jdbcUrl}" />
-
         <property name="user" value="${jdbc.user}" />
-
         <property name="password" value="${jdbc.password}" />
-
         <property name="initialPoolSize" value="${jdbc.initialPoolSize}"/>
-
         <property name="maxPoolSize" value="${jdbc.maxPoolSize}"/>
-
         <property name="maxIdleTime" value="${jdbc.maxIdleTime}"/>
-
         <property name="acquireIncrement" value="${jdbc.acquireIncrement}"/>
-
         <property name="acquireRetryAttempts" value="${jdbc.acquireRetryAttempts}"/>
-
         <property name="acquireRetryDelay" value="${jdbc.acquireRetryDelay}"/>
+    </bean>
 
+    <!--动态数据源-->
+    <bean id="multipleDataSource"  class="com.lesso.common.db.DynamicDataSource">
+        <property name="dataSourceFactory" ref="dataSourceFactory"/>
+        <property name="masterDataSource" ref="dataSource"/>
     </bean>
 
     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
         <property name = "dataSource" ref="dataSource"/>
     </bean>
 
-    <bean id="multipleDataSource"  class="com.lesso.common.db.DynamicDataSource">
-        <property name="dataSourceFactory" ref="dataSourceFactory"/>
-        <property name="masterDataSource" ref="dataSource"/>
-    </bean>
-
     <!--数据源工厂-->
     <bean id="dataSourceFactory" class="com.lesso.common.db.ComboPooledDataSourceFactory">
-
         <property name="driverClassName" value="${jdbc.driverClass}"/>
-
         <property name="jdbcUrlPrefix" value="${jdbc.jdbcUrlPrefix}"/>
-
         <property name="jdbcUrlSuffix" value="${jdbc.jdbcUrlSuffix}"/>
-
         <property name="initialPoolSize" value="${jdbc.initialPoolSize}"/>
-
         <property name="maxPoolSize" value="${jdbc.maxPoolSize}"/>
-
         <property name="maxIdleTime" value="${jdbc.maxIdleTime}"/>
-
         <property name="acquireIncrement" value="${jdbc.acquireIncrement}"/>
-
         <property name="acquireRetryAttempts" value="${jdbc.acquireRetryAttempts}"/>
-
         <property name="acquireRetryDelay" value="${jdbc.acquireRetryDelay}"/>
     </bean>
 
@@ -74,13 +55,6 @@
         <!-- 自动扫描mapping.xml文件 -->
         <property name="mapperLocations" value="classpath:/mapper/*/*.xml"></property>
     </bean>
-
-    <!-- 连接url参数 -->
-    <util:map id="urlProperties" map-class="java.util.HashMap">
-        <entry key="useUnicode" value="true"/>
-        <entry key="characterEncoding" value="utf-8"/>
-        <entry key="rewriteBatchedStatements" value="true"/>
-    </util:map>
 
     <!-- DAO接口所在包名，Spring会自动查找其下的类 -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">

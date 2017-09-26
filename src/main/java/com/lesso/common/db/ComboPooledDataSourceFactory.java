@@ -18,9 +18,6 @@ public class ComboPooledDataSourceFactory implements AbstractDataSourceFactory{
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    TenantInfoMapper tenantInfoMapper;
-
     //jdbcUrl前缀 拼接jdbcUrl需要用到
     private String jdbcUrlPrefix;
 
