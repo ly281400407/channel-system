@@ -8,8 +8,6 @@ import com.lesso.pojo.Finance;
 import com.lesso.pojo.TenantInfo;
 import com.lesso.pojo.User;
 import com.lesso.service.TestService;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
