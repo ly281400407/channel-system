@@ -2,6 +2,7 @@ package com.lesso.service.impl;
 
 import com.lesso.common.db.DataBaseInfo;
 import com.lesso.common.db.DataSourceHolder;
+import com.lesso.common.util.FastDFSUtils;
 import com.lesso.mapper.manager.FinanceMapper;
 import com.lesso.mapper.manager.ServerInfoMapper;
 import com.lesso.mapper.manager.TenantInfoMapper;
@@ -358,4 +359,11 @@ public class TestServiceImpl implements TestService {
 /*        DynamicDataSource dynamicDataSource= SpringContextUtil.getBean("multipleDataSource");
         dynamicDataSource.addDataSource(dataBaseInfo);*/
     }
+    //上传
+         public String uploadPic(byte[] pic, String name, long size){
+                return FastDFSUtils.uploadPic(pic, name, size);
+         }
+        public String uploadPic(String picPath, String name, long size){
+            return FastDFSUtils.uploadPic(picPath, name, size);
+        }
 }

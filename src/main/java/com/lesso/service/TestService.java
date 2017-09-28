@@ -23,5 +23,7 @@ public interface TestService {
     public Map queryUserDifferentTable(User user);
     public Map insertFinanceDifferentTable(Finance finance);
     public Map queryFinanceDifferentTable(Finance finance);
+    public String uploadPic(byte[] pic, String name, long size);
+    public String uploadPic(String picPath, String name, long size);
 
 }

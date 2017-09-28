@@ -15,6 +15,7 @@
     <!-- 引入同文件夹下的redis属性配置文件 -->
     <beans:import resource="spring-redis.xml"/>
 
+
     <!-- 这两个类用来启动基于Spring MVC的注解功能，将控制器与方法映射加入到容器中 -->
     <beans:bean
             class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
@@ -32,6 +33,13 @@
     <beans:bean id="objectMapper" class="com.lesso.common.network.CustomObjectMapper" init-method="init">
         <beans:property name="camelCaseToLowerCaseWithUnderscores" value="true"/>
         <beans:property name="dateFormatPattern" value="yyyy-MM-dd HH:mm:ss"/>
+    </beans:bean>
+    <!-- 配置文件上传 -->
+    <beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <beans:property name="defaultEncoding" value="utf-8" />
+        <beans:property name="maxUploadSize" value="10737418240" />
+        <beans:property name="maxInMemorySize" value="4096" />
+        <beans:property name="resolveLazily" value="true" />
     </beans:bean>
 
     <!-- Jackson来提供JSON的序列化操作 -->

@@ -26,6 +26,10 @@
         <property name="acquireRetryDelay" value="${jdbc.acquireRetryDelay}"/>
     </bean>
 
+
+
+
+
     <!--动态数据源-->
     <bean id="multipleDataSource"  class="com.lesso.common.db.DynamicDataSource">
         <property name="dataSourceFactory" ref="dataSourceFactory"/>
