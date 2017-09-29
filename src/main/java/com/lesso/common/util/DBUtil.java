@@ -11,7 +11,7 @@ public class DBUtil {
 
     private Logger logger = Logger.getLogger(DBUtil.class);
 
-    public boolean createDataBase(String ip, String port, String connectUser, String connectPassword, String dbName, String user){
+    public synchronized boolean createDataBase(String ip, int port, String connectUser, String connectPassword, String dbName, String user, String userPass){
 
         try {
             String url = "jdbc:mysql://" + ip + ":" + port;

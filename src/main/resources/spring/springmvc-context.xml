@@ -58,6 +58,14 @@
         <beans:property name="userName" value="X-User"/>
     </beans:bean>
 
+    <!--数据库服务器分配者-->
+    <beans:bean id="serverDistributor" class="com.lesso.common.db.DefaultServerDistributor" ></beans:bean>
+
+    <!--用户库创建者-->
+    <beans:bean id="userDbCreator" class="com.lesso.common.db.DefaultUserDbCreator">
+        <beans:property name="serverDistributor" ref="serverDistributor"/>
+    </beans:bean>
+
     <aop:config>
         <aop:aspect ref="securityAspect">
             <aop:around method="execute" pointcut="@annotation(org.springframework.web.bind.annotation.RequestMapping)"/>

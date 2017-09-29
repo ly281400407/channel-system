@@ -15,7 +15,7 @@ import java.sql.SQLException;
 
 public class ComboPooledDataSourceFactory implements AbstractDataSourceFactory{
 
-    @Autowired
+
     JdbcTemplate jdbcTemplate;
 
     //jdbcUrl前缀 拼接jdbcUrl需要用到
@@ -86,6 +86,10 @@ public class ComboPooledDataSourceFactory implements AbstractDataSourceFactory{
 
     public void setAcquireRetryDelay(int acquireRetryDelay) {
         this.acquireRetryDelay = acquireRetryDelay;
+    }
+
+    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override

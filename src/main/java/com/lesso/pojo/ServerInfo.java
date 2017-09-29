@@ -12,6 +12,8 @@ public class ServerInfo {
     private int status;
     private int created;
     private String modifyman;
+    private String managerUser;
+    private String managerPassword;
     private int updated;
 
     public int getId() {
@@ -84,5 +86,21 @@ public class ServerInfo {
 
     public void setUpdated(int updated) {
         this.updated = updated;
+    }
+
+    public String getManagerUser() {
+        return managerUser;
+    }
+
+    public void setManagerUser(String managerUser) {
+        this.managerUser = managerUser;
+    }
+
+    public String getManagerPassword() {
+        return managerPassword;
+    }
+
+    public void setManagerPassword(String managerPassword) {
+        this.managerPassword = managerPassword;
     }
 }

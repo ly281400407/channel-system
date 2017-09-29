@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-                        http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
-                        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+                        http://www.springframework.org/schema/beans/spring-beans-4.2.xsd">
 
     <!-- 引入配置文件 -->
     <bean id="propertyConfigurer"
@@ -27,9 +25,6 @@
     </bean>
 
 
-
-
-
     <!--动态数据源-->
     <bean id="multipleDataSource"  class="com.lesso.common.db.DynamicDataSource">
         <property name="dataSourceFactory" ref="dataSourceFactory"/>
@@ -42,6 +37,7 @@
 
     <!--数据源工厂-->
     <bean id="dataSourceFactory" class="com.lesso.common.db.ComboPooledDataSourceFactory">
+        <property name="jdbcTemplate" ref="jdbcTemplate"/>
         <property name="driverClassName" value="${jdbc.driverClass}"/>
         <property name="jdbcUrlPrefix" value="${jdbc.jdbcUrlPrefix}"/>
         <property name="jdbcUrlSuffix" value="${jdbc.jdbcUrlSuffix}"/>
