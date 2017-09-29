@@ -4,15 +4,18 @@ import com.lesso.common.db.DataSourceHolder;
 import com.lesso.common.exception.TokenException;
 import com.lesso.common.network.Response;
 import com.lesso.common.security.IgnoreSecurity;
+import com.lesso.common.util.MultipartFileUtil;
 import com.lesso.pojo.Finance;
 import com.lesso.pojo.TenantInfo;
 import com.lesso.pojo.User;
 import com.lesso.service.TestService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,7 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@RestController
+@Controller
 public class TestController {
 
     @Resource
@@ -94,6 +97,11 @@ public class TestController {
         return "addFinance";
     }
 
+    @IgnoreSecurity(val = true)
+    @RequestMapping("/uploadPage")
+    public String uploadPage(){
+        return "upload";
+    }
 
     @IgnoreSecurity(val = true)
     @RequestMapping(value = "/test")
@@ -339,4 +347,26 @@ public class TestController {
         }
         return resultMap;
     }
+
+
+
+
+        //上传图片品牌
+        @IgnoreSecurity(val = true)
+        @RequestMapping(value="/uploadPic")
+        @ResponseBody
+        public Map uploadPic(@RequestParam(required=false)MultipartFile picture, HttpServletResponse response) throws Exception{
+           // picture.getBytes();
+            String path = testService.uploadPic(MultipartFileUtil.multipartToByte(picture).getPath(), picture.getOriginalFilename(), picture.getSize());
+            //path:group1/M00/00/01/wKjIgFWOYc6APpjAAAD-qk29i78248.jpg
+            //url:http://192.168.200.128 (Linux 虚拟机的ip地址)
+            String url ="192.168.149.135/" + path;
+            Map<String,Object> resultMap=new HashMap<>();
+            resultMap.put("url", url);
+            resultMap.put("path", path);
+            return resultMap;
+        }
+
+
+
 }

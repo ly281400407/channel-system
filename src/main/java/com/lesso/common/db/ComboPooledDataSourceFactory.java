@@ -95,9 +95,9 @@ public class ComboPooledDataSourceFactory implements AbstractDataSourceFactory{
 
         try {
 
-            final String tenantAccount = (String) o;
+            final String dbName = (String) o;
             //TenantInfo tenantInfo = tenantInfoMapper.getTenantInfo(tenantAccount);
-            TenantInfo tenantInfo =  jdbcTemplate.queryForObject("select * from QDTenantInfo where tenant_Account = '" + tenantAccount + "'", new RowMapper<TenantInfo>() {
+            TenantInfo tenantInfo =  jdbcTemplate.queryForObject("select * from QDTenantInfo where dbName = '" + dbName + "' limit 1", new RowMapper<TenantInfo>() {
                 @Override
                 public TenantInfo mapRow(ResultSet resultSet, int i) throws SQLException {
                     TenantInfo tenantInfo = new TenantInfo();

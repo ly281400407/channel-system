@@ -106,15 +106,15 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
      */
     @Override
     public void afterPropertiesSet() {
-/*        if(this.targetDataSources != null) {
-            Iterator var1 = this.targetDataSources.entrySet().iterator();
-            while(var1.hasNext()) {
-                Map.Entry entry = (Map.Entry)var1.next();
-                Object lookupKey = this.resolveSpecifiedLookupKey(entry.getKey());
-                DataSource dataSource = this.resolveSpecifiedDataSource(entry.getValue());
-                this.targetDataSource.put(lookupKey, dataSource);
-            }
-        }*/
+//       if(this.targetDataSources != null) {
+//            Iterator var1 = this.targetDataSources.entrySet().iterator();
+//            while(var1.hasNext()) {
+//                Map.Entry entry = (Map.Entry)var1.next();
+//                Object lookupKey = this.resolveSpecifiedLookupKey(entry.getKey());
+//                DataSource dataSource = this.resolveSpecifiedDataSource(entry.getValue());
+//                this.targetDataSource.put(lookupKey, dataSource);
+//            }
+//        }
     }
 
     public DataSource getMasterDataSource() {
