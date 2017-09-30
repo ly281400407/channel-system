@@ -1,5 +1,7 @@
 package com.lesso.pojo;
 
+import java.util.Date;
+
 /**
  * Created by czx on 2017/9/21.
  */
@@ -16,6 +18,25 @@ public class TenantInfo {
     private String dbAccount;
     private String verificationCode;
     private Integer status;
+
+    private Date created;
+    private Date updated;
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    public Date getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(Date updated) {
+        this.updated = updated;
+    }
 
     public Integer getStatus() {
         return status;

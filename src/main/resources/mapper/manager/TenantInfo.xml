@@ -4,8 +4,24 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lesso.mapper.manager.TenantInfoMapper">
 
-    <select id="getTenantInfo" resultType="com.lesso.pojo.TenantInfo">
-        select * from QDTenantInfo where tenant_Account = #{tenantAccount}
+    <select id="getTenantByName" resultType="com.lesso.pojo.TenantInfo">
+        select * from QDTenantInfo where tenantAccount = #{tenantAccount}
     </select>
+
+    <select id="getTenantByPhone" resultType="com.lesso.pojo.TenantInfo">
+        select * from QDTenantInfo where phoneNo = #{phoneNo}
+    </select>
+
+    <select id="getTenantByIdOrName" resultType="com.lesso.pojo.TenantInfo">
+        select id,tenantAccount as tenantAccount,tenantPassword,serverIp,servertPort as serverPort,dbName,dbAccount as dbAccount,dbPassword,companyName,phoneNo
+        from QDTenantInfo t where id= #{tenantId}  and tenantAccount = #{tenantAccount}
+    </select>
+
+    <update id="updateTenantStatus">
+        UPDATE QDTenantInfo
+        SET status=  #{status}
+        WHERE id = #{id} or tenantAccount={tenantAccount};
+    </update>
+
 
 </mapper>

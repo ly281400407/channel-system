@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lesso.mapper.manager.MsgMapper">
+
+    <insert id="insertMsg" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO VerificationCode (
+        phoneNo,
+        type,
+        verificationCode,
+        invalidTime,
+        createTime,
+        delflag)
+        VALUES   (
+        #{phoneNo},
+        #{type},
+        #{verificationCode},
+        #{invalidTime},
+        #{createTime},
+        #{delflag}
+        )
+    </insert>
+
+    <select id="getEffectiveMsg" resultType="com.lesso.pojo.Msg">
+        select * from VerificationCode t where t.phoneNo= #{phoneNo} and t.verificationCode= #{verificationCode} and t.createTime >= NOW()
+    </select>
+
+
+
+</mapper>

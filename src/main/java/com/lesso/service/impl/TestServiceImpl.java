@@ -43,7 +43,7 @@ public class TestServiceImpl implements TestService {
     }
 
     public TenantInfo getTenantInfo(String tenantAccount) {
-        TenantInfo tenantInfo = tenantInfoMapper.getTenantInfo(tenantAccount);
+        TenantInfo tenantInfo = tenantInfoMapper.getTenantByName(tenantAccount);
         return tenantInfo;
     }
 
@@ -67,7 +67,7 @@ public class TestServiceImpl implements TestService {
                     tenant.setDbAccount("qudao_"+tenant.getTenantAccount());
                     tenant.setDbPassword("qudao_"+tenant.getTenantPassword());
 
-                    serverInfoMapper.insertUser(tenant);
+                    serverInfoMapper.insertTenantInfo(tenant);
                     serverInfoMapper.updateQDServerInfo(serverInfo.getServerIp());
                     resultMap.put("isCreateUser",true);
                 }else{
@@ -155,7 +155,6 @@ public class TestServiceImpl implements TestService {
         user.setName(tenant.getTenantAccount());
         user.setPassword(tenant.getTenantPassword());
         user.setCompanyName(tenant.getCompanyName());
-        /*user.setSex(1);*/
         user.setTenantId(tenant.getId());
         this.userMapper.insertUser(user);
 
@@ -238,7 +237,6 @@ public class TestServiceImpl implements TestService {
         Map<String,Object> resultMap=new HashMap<>();
         User user1=this.userMapper.getUserInfo(user);
         if(user1!=null && user1.getId()!=null){
-            /*user1.setDbName(user.getDbName());*/
             resultMap.put("islogin",true);
             resultMap.put("user",user1);
             resultMap.put("msg","login successlly");
@@ -253,7 +251,6 @@ public class TestServiceImpl implements TestService {
     @Override
     public Map getUserList(User user) {
         Map<String,Object> resultMap=new HashMap<>();
-        /*user.setSearchText("%"+user.getSearchText()+"%");*/
        List<User> users=this.userMapper.getList(user);
         if(users!=null && users.size()>0){
             resultMap.put("users",users);
@@ -291,7 +288,6 @@ public class TestServiceImpl implements TestService {
     @Override
     public Map insertUserDifferentTable(User user) {
         String tableIndex=getRoundingTableIndex(user.getTenantId());
-        /*user.setTableIndex(tableIndex);*/
        String sql="Create Table If Not Exists  `t_user"+tableIndex+"` ("  +
         "`id` int(11) NOT NULL AUTO_INCREMENT,\n" +
                 "  `name` varchar(255) DEFAULT NULL,\n" +
@@ -312,8 +308,6 @@ public class TestServiceImpl implements TestService {
     @Override
     public Map queryUserDifferentTable(User user) {
         String tableIndex=getRoundingTableIndex(user.getTenantId());
-        /*user.setSearchText( "%"+user.getSearchText()+"%");*/
-        /*user.setTableIndex(tableIndex);*/
         List<User> users=this.userMapper.getUserByTableIndex(user);
         Map<String,Object> resultMap=new HashMap<>();
         resultMap.put("msg","query user in different table successfully");

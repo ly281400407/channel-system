@@ -4,6 +4,59 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lesso.mapper.user.UserMapper">
 
+
+    <insert id="insertUser" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO User (
+        tenantAccount,
+        username,
+        password,
+        userType,
+        phoneNo,
+        email,
+        name,
+        birthday,
+        idNo,
+        departmentNo,
+        departmentName,
+        placeOfOrigin,
+        province,
+        city,
+        county,
+        address,
+        abbreviation,
+        registerTime,
+        lastLoginTime,
+        createTime,
+        updateTime,
+        delflag)
+        VALUES (
+        #{tenantAccount},
+        #{username},
+        #{password},
+        #{userType},
+        #{phoneNo},
+        #{email},
+        #{name},
+        #{idNo},
+        #{departmentNo},
+        #{departmentName},
+        #{placeOfOrigin},
+        #{province},
+        #{city},
+        #{county},
+        #{address},
+        #{abbreviation},
+        #{registerTime},
+        #{lastLoginTime},
+        #{createTime},
+        #{updateTime},
+        #{delflag}
+        )
+    </insert>
+
+
+
+
     <select id="get" resultType="com.lesso.pojo.User">
         select * from t_user where id = #{id}
     </select>
@@ -13,24 +66,10 @@
     </select>
 
     <select id="getUserInfo" resultType="com.lesso.pojo.User">
-        select * from t_user where name = #{name}  and password = #{password}
+        select * from User where username = #{username}  and password = #{password}
     </select>
 
-    <insert id="insertUser" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO t_user (
-        name,
-        password,
-        sex,
-        company,
-        tenant_id)
-        VALUES (
-        #{name},
-        #{password},
-        #{sex},
-        #{companyName},
-        #{tenantId}
-        )
-    </insert>
+
 
     <update id="executeCreateQuery" parameterType="map">
         ${sql}
