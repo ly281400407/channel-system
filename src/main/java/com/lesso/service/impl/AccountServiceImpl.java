@@ -267,6 +267,7 @@ public class AccountServiceImpl implements IAccountService {
     }
 
     @Override
+    @Transactional(propagation= Propagation.REQUIRED)
     public Map loginOfUser(User user) {
         Map<String,Object> resultMap=new HashMap<>();
         User user1=this.userMapper.getUserInfo(user);
@@ -291,10 +292,13 @@ public class AccountServiceImpl implements IAccountService {
         msg.setVerificationCode(verificationCode);
         Map<String,Object> resultMap=new HashMap<>();
         if(SMSUtil.sendCodeMsg(msg.getPhoneNo(),verificationCode)){
-            Calendar nowTime = Calendar.getInstance();
-            msg.setCreateTime(nowTime.getTime());
-            nowTime.add(Calendar.MINUTE, 5);
-            msg.setInvalidTime(nowTime.getTime());
+
+            Date now = new Date();
+            Date afterDate = new Date(now.getTime() + 300000);
+
+            msg.setCreateTime(now);
+            msg.setInvalidTime(afterDate);
+
             msg.setType(0);
             msg.setDelflag(0);
             this.msgMapper.insertMsg(msg);

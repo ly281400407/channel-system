@@ -116,7 +116,7 @@ public class AccountController {
         String password=request.getParameter("password");
         String dbName=request.getParameter("dbName");
         User user=new User();
-        user.setName(userName);
+        user.setUsername(userName);
         user.setPassword(password);
 
         Map<String,Object> resultMap=new HashMap<>();
