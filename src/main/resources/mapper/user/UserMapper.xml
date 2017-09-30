@@ -36,6 +36,7 @@
         #{userType},
         #{phoneNo},
         #{email},
+        #{birthday},
         #{name},
         #{idNo},
         #{departmentNo},

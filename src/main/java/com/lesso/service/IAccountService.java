@@ -14,7 +14,6 @@ public interface IAccountService {
     public Map createUserDB(AdminUser adminUser,User user);
     public Map loginOfTenantInfo(TenantInfo tenant);
     public Map loginOfUser(User user);
-    public Map addUser(User user);
     public Map getVerificationCode(Msg msg);
 
 }

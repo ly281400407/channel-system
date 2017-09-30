@@ -52,7 +52,7 @@ public class AccountController {
 
     //完善租户信息
     @IgnoreSecurity(val = true)
-    @RequestMapping(value = "/tenant",method = RequestMethod.GET)//method = RequestMethod.PUT
+    @RequestMapping(value = "/tenant",method = RequestMethod.PUT)//method = RequestMethod.PUT
     @ResponseBody
     public Map updateTenantInfo(HttpServletRequest request, HttpServletResponse response) throws TokenException {
         String tenantId=request.getParameter("tenantId");
@@ -131,7 +131,7 @@ public class AccountController {
 
     //租户登录
     @IgnoreSecurity(val = true)
-   // @RequestMapping(value = "/tenant",method = RequestMethod.GET)
+    @RequestMapping(value = "/tenant",method = RequestMethod.GET)
     @ResponseBody
     public Map loginOfTenantInfo(HttpServletRequest request, HttpServletResponse response) throws TokenException {
         String userName=request.getParameter("userName");

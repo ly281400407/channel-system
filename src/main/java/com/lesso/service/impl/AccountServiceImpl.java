@@ -1,14 +1,9 @@
 package com.lesso.service.impl;
 
-import com.lesso.common.db.DataBaseInfo;
 import com.lesso.common.db.DataSourceHolder;
-import com.lesso.common.db.DynamicDataSource;
 import com.lesso.common.util.DataBaseUtil;
-import com.lesso.common.util.FastDFSUtils;
-import com.lesso.common.util.SpringContextUtil;
 import com.lesso.common.util.UUIDUtil;
-import com.lesso.common.util.sms3.SMSUtil;
-import com.lesso.mapper.manager.FinanceMapper;
+import com.lesso.common.sms.SMSUtil;
 import com.lesso.mapper.manager.MsgMapper;
 import com.lesso.mapper.manager.ServerInfoMapper;
 import com.lesso.mapper.manager.TenantInfoMapper;
@@ -26,7 +21,7 @@ import java.util.*;
  * Created by czx on 2017/9/26.
  */
 @Service("accountService")
-@Transactional(propagation= Propagation.REQUIRED)
+/*@Transactional(propagation= Propagation.REQUIRED)*/
 public class AccountServiceImpl implements IAccountService {
     @Autowired
     private ServerInfoMapper serverInfoMapper;
@@ -58,6 +53,7 @@ public class AccountServiceImpl implements IAccountService {
    }
 
     @Override
+    @Transactional(propagation= Propagation.REQUIRED)
     public Map createUserInfo( TenantInfo tenant) {
         Map<String,Object> resultMap=new HashMap<>();
         if(tenant!=null){
@@ -163,11 +159,13 @@ public class AccountServiceImpl implements IAccountService {
     public Map createUserDB(AdminUser adminUser,User user) {
         Map<String,Object> resultMap=new HashMap<>();
 
+
+        DataSourceHolder.setDataSource(null);
+
         TenantInfo tenant= this.tenantInfoMapper.getTenantByIdOrName(user.getTenantId(),user.getTenantAccount());
 
         //创建数据库操作
         DataSourceHolder.setDataSource(DataBaseUtil.getRootOfBusinessDB(tenant.getServerIp()));
-
         Map<String,Object> map=new HashMap<>();
         String creatDB="create database "+tenant.getDbName();
         map.put("sql",creatDB);
@@ -183,6 +181,8 @@ public class AccountServiceImpl implements IAccountService {
         map.put("sql","flush  privileges");
         this.serverInfoMapper.executeCreateQuery(map);
 
+
+        DataSourceHolder.setDataSource(null);
         //激活租户用户
         adminUser.setStatus(1);
         this.serverInfoMapper.updateAdminUserStatus(adminUser);
@@ -193,9 +193,9 @@ public class AccountServiceImpl implements IAccountService {
 
         DataSourceHolder.setDataSource(tenant.getDbName());
 
-        String createTable= "CREATE TABLE `User` (\n" +
+        String createTable= "CREATE TABLE IF NOT EXISTS  `User` (\n" +
                 "  `id` int(10) NOT NULL AUTO_INCREMENT,\n" +
-                "  `tenantAccount` varchar(20)) NOT NULL DEFAULT '' COMMENT '租户账号',\n" +
+                "  `tenantAccount` varchar(20) NOT NULL DEFAULT '' COMMENT '租户账号',\n" +
                 "  `username` varchar(20)  NOT NULL DEFAULT '' COMMENT '用户账号',\n" +
                 "  `password` varchar(50)  NOT NULL DEFAULT '' COMMENT '密码',\n" +
                 "  `userType` tinyint(2)  NOT NULL DEFAULT '0' COMMENT '用户类型-1商户-2商户员工',\n" +
@@ -227,11 +227,17 @@ public class AccountServiceImpl implements IAccountService {
         this.serverInfoMapper.executeCreateQuery(map);
 
         Date now = new Date();
+        user.setPassword(tenant.getTenantPassword());
         user.setLastLoginTime(now);
         user.setCreateTime(now);
         user.setRegisterTime(now);
         user.setLastLoginTime(now);
+        user.setUserType(1L);
         user.setDelflag(0);
+        user.setPhoneNo(tenant.getPhoneNo());
+
+        user.setCreateTime(now);
+        user.setUpdateTime(now);
 
         //保存租户的信息保存到业务用户表中
         this.userMapper.insertUser(user);
@@ -246,6 +252,7 @@ public class AccountServiceImpl implements IAccountService {
     public Map loginOfTenantInfo(TenantInfo tenant) {
         Map<String,Object> resultMap=new HashMap<>();
         TenantInfo tenantInfo=this.serverInfoMapper.getUserInfo(tenant);
+
         if(tenantInfo!=null && tenantInfo.getId()!=null){
             resultMap.put("islogin",true);
             resultMap.put("tenant",tenant);
@@ -266,25 +273,19 @@ public class AccountServiceImpl implements IAccountService {
         if(user1!=null && user1.getId()!=null){
             resultMap.put("islogin",true);
             resultMap.put("user",user1);
-            resultMap.put("msg","login successlly");
+            resultMap.put("msg","登录成功");
         }else{
             resultMap.put("islogin",false);
             resultMap.put("user",user);
-            resultMap.put("msg","login fail");
+            resultMap.put("msg","登录失败");
         }
         return resultMap;
     }
 
-    @Override
-    public Map addUser(User user) {
-        Map<String,Object> resultMap=new HashMap<>();
-        int rows=this.userMapper.insertUser(user);
-        resultMap.put("user",user);
-        resultMap.put("msg","save user successlly");
-        return resultMap;
-    }
+
 
     @Override
+    @Transactional(propagation= Propagation.REQUIRED)
     public Map getVerificationCode(Msg msg) {
         String verificationCode=UUIDUtil.getNumUUID(4);
         msg.setVerificationCode(verificationCode);

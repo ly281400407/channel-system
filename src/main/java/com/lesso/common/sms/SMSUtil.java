@@ -1,4 +1,4 @@
-package com.lesso.common.util.sms3;
+package com.lesso.common.sms;
 
 /**
  * Created by czx on 2017/9/29.

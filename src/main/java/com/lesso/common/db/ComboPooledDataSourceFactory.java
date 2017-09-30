@@ -107,9 +107,9 @@ public class ComboPooledDataSourceFactory implements AbstractDataSourceFactory{
                     TenantInfo tenantInfo = new TenantInfo();
                     tenantInfo.setDbPassword(resultSet.getString("dbPassword"));
                     tenantInfo.setDbName(resultSet.getString("dbName"));
-                    tenantInfo.setDbAccount(resultSet.getString("db_Account"));
+                    tenantInfo.setDbAccount(resultSet.getString("dbAccount"));
                     tenantInfo.setServerIp(resultSet.getString("serverIp"));
-                    tenantInfo.setServerPort(resultSet.getInt("servertPort"));
+                    tenantInfo.setServerPort(resultSet.getInt("serverPort"));
                     return tenantInfo;
                 }
             });

@@ -20,7 +20,7 @@
     <update id="updateTenantStatus">
         UPDATE QDTenantInfo
         SET status=  #{status}
-        WHERE id = #{id} or tenantAccount={tenantAccount};
+        WHERE id = #{id} or tenantAccount= #{tenantAccount};
     </update>
 
 
