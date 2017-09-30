@@ -13,17 +13,17 @@
     </select>
 
     <select id="getUserDBInfo" resultType="com.lesso.pojo.TenantInfo">
-        select id,tenantAccount as tenantAccount,tenantPassword,serverIp,servertPort as serverPort,dbName,dbAccount as dbAccount,dbPassword,companyName,phoneNo
+        select id,tenantAccount as tenantAccount,tenantPassword,serverIp,serverPort as serverPort,dbName,dbAccount as dbAccount,dbPassword,companyName,phoneNo
         from QDTenantInfo t where phoneNo= #{phoneNo}
     </select>
 
     <select id="getUserInfo" resultType="com.lesso.pojo.TenantInfo">
-        select id,tenantAccount as tenantAccount,tenantPassword,serverIp,servertPort as serverPort,dbName,dbAccount as dbAccount,dbPassword,companyName,phoneNo
+        select id,tenantAccount as tenantAccount,tenantPassword,serverIp,serverPort as serverPort,dbName,dbAccount as dbAccount,dbPassword,companyName,phoneNo
         from QDTenantInfo t where tenantAccount= #{tenantAccount}  and tenantPassword = #{tenantPassword}
     </select>
 
     <select id="getAllUser" resultType="com.lesso.pojo.TenantInfo">
-        select id,tenantAccount as tenantAccount,tenantPassword,serverIp,servertPort as serverPort,dbName,dbAccount as dbAccount,dbPassword,companyName,phoneNo
+        select id,tenantAccount as tenantAccount,tenantPassword,serverIp,serverPort as serverPort,dbName,dbAccount as dbAccount,dbPassword,companyName,phoneNo
         from QDTenantInfo t
     </select>
 
@@ -92,7 +92,7 @@
     <update id="updateAdminUserStatus">
         UPDATE User
         SET status=  #{status}
-        WHERE id = #{id} or username={username};
+        WHERE id = #{id} or username= #{username};
     </update>
 
 
