@@ -1,26 +1,30 @@
 package com.lesso.pojo;
 
+import java.util.Date;
+
 /**
  * Created by czx on 2017/9/20.
  */
 public class ServerInfo {
-    private int id;
+    private Integer id;
     private String serverIp;
-    private int servertPort;
-    private int tenant_maxcount;
-    private int tenant_curcount;
-    private int status;
-    private int created;
+    private Integer serverPort;
+    private Integer tenantMaxcount;
+    private Integer tenantCurcount;
+    private Integer status;
+    private String createman;
+    private Date created;
+    private Date updated;
     private String modifyman;
     private String managerUser;
     private String managerPassword;
-    private int updated;
+    private Integer delflag;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -32,44 +36,61 @@ public class ServerInfo {
         this.serverIp = serverIp;
     }
 
-    public int getServertPort() {
-        return servertPort;
+
+    public Integer getServerPort() {
+        return serverPort;
     }
 
-    public void setServertPort(int servertPort) {
-        this.servertPort = servertPort;
+    public void setServerPort(Integer serverPort) {
+        this.serverPort = serverPort;
     }
 
-    public int getTenant_maxcount() {
-        return tenant_maxcount;
+    public Integer getTenantMaxcount() {
+        return tenantMaxcount;
     }
 
-    public void setTenant_maxcount(int tenant_maxcount) {
-        this.tenant_maxcount = tenant_maxcount;
+    public void setTenantMaxcount(Integer tenantMaxcount) {
+        this.tenantMaxcount = tenantMaxcount;
     }
 
-    public int getTenant_curcount() {
-        return tenant_curcount;
+    public Integer getTenantCurcount() {
+        return tenantCurcount;
     }
 
-    public void setTenant_curcount(int tenant_curcount) {
-        this.tenant_curcount = tenant_curcount;
+    public void setTenantCurcount(Integer tenantCurcount) {
+        this.tenantCurcount = tenantCurcount;
     }
 
-    public int getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
-    public int getCreated() {
+    public String getCreateman() {
+        return createman;
+    }
+
+    public void setCreateman(String createman) {
+        this.createman = createman;
+    }
+
+    public Date getCreated() {
         return created;
     }
 
-    public void setCreated(int created) {
+    public void setCreated(Date created) {
         this.created = created;
+    }
+
+    public Date getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(Date updated) {
+        this.updated = updated;
     }
 
     public String getModifyman() {
@@ -78,14 +99,6 @@ public class ServerInfo {
 
     public void setModifyman(String modifyman) {
         this.modifyman = modifyman;
-    }
-
-    public int getUpdated() {
-        return updated;
-    }
-
-    public void setUpdated(int updated) {
-        this.updated = updated;
     }
 
     public String getManagerUser() {
@@ -102,5 +115,13 @@ public class ServerInfo {
 
     public void setManagerPassword(String managerPassword) {
         this.managerPassword = managerPassword;
+    }
+
+    public Integer getDelflag() {
+        return delflag;
+    }
+
+    public void setDelflag(Integer delflag) {
+        this.delflag = delflag;
     }
 }

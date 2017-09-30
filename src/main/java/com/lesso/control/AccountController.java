@@ -100,7 +100,7 @@ public class AccountController {
         User user=new User();
         user.setName(userName);
         user.setPassword(password);
-        user.setDbName(dbName);
+        /*user.setDbName(dbName);*/
         Map<String,Object> resultMap=new HashMap<>();
         try{
             resultMap=this.accountService.loginOfUser(user);

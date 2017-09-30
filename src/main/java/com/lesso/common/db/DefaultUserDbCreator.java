@@ -1,9 +1,15 @@
 package com.lesso.common.db;
 
 import com.lesso.common.util.DBUtil;
+import com.lesso.pojo.AdminUser;
 import com.lesso.pojo.ServerInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 public class DefaultUserDbCreator implements AbstractUserDbCreator{
+
+    @Autowired
+    JdbcTemplate jdbcTemplate;
 
     private AbstractServerDistributor serverDistributor;
 
@@ -16,16 +22,22 @@ public class DefaultUserDbCreator implements AbstractUserDbCreator{
     }
 
     @Override
-    public void createUserDb(Object o) {
+    public void createTenantDb(Object o) {
 
-        String tenantAccount = (String) o;
-        String dbName = tenantAccount;
-        String dbPassword = tenantAccount;
-        String dbAccount = tenantAccount;
-        ServerInfo serverInfo = serverDistributor.distribution(o);
+        AdminUser user = (AdminUser) o;
+        ServerInfo serverInfo = serverDistributor.distribution(user);
 
         DBUtil dBUtil = new DBUtil();
-        dBUtil.createDataBase(serverInfo.getServerIp(), serverInfo.getServertPort(), serverInfo.getManagerUser(), serverInfo.getManagerPassword(), dbName, dbAccount, dbPassword);
+        dBUtil.createDataBase(serverInfo.getServerIp(), serverInfo.getServerPort(), serverInfo.getManagerUser(), serverInfo.getManagerPassword(), user.getUsername(), user.getUsername(), user.getPassword());
+
+        //创建tenant租户信息
+        StringBuilder sb = new StringBuilder("insert into QDTenantInfo(tenantAccount, tenantPassword, serverIp, serverPort, dbName, dbPassword, status, created, updated, phoneNo, dbAccount)");
+        sb.append("values('"+user.getUsername()+"','"+user.getPassword()+"','"+serverInfo.getServerIp()+"','"+serverInfo.getServerPort()+"','"+user.getUsername()+"','"+user.getPassword()+"','"+"1"+"',sysdate(),sysdate(),'"+user.getPhoneNo()+"','"+user.getPassword()+"');");
+        jdbcTemplate.execute(sb.toString());
+
+        //更新服务器信息
+        String updateSql = "update QDServerInfo si set si.tenantCurcount = si.tenantCurcount + 1 where si.serverIp = '"+serverInfo.getServerIp()+"' and si.serverPort = '"+serverInfo.getServerPort()+"'";
+        jdbcTemplate.execute(updateSql);
     }
 
 }

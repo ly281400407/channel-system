@@ -1,7 +1,11 @@
 package com.lesso.common.db;
 
+import com.ibatis.common.resources.Resources;
+
 import java.io.*;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 脚本生成器
@@ -9,19 +13,23 @@ import java.util.Map;
  */
 public class ScriptGenerator {
 
-    public File generatorScript(Map<String, String> parameter){
-
-        String dbName = (String) parameter.get("dbName");
-        String userName = (String) parameter.get("userName");
-        String password = (String) parameter.get("password");
+    /**
+     * 生成执行dll脚本
+     * @param parameter
+     * @return
+     */
+    public File generatorScript(Map<String, String> parameter) throws IOException {
 
         long systime = System.currentTimeMillis();
         String fileName = systime+".sql";
         File file = new File(fileName);
+        file.createNewFile();
+        File file1 = new File("");
+        System.out.println(file1.getAbsolutePath());
+        //File template = new File("template/create-tenant.sql");
 
-        File template = new File("create-template.sql");
         try{
-            InputStream inputStream = new FileInputStream(template);
+            InputStream inputStream = Resources.getResourceAsStream("template/create-tenant.sql");
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
@@ -33,6 +41,8 @@ public class ScriptGenerator {
             while (null!=str){
                 str = matchingParam(str, parameter);
                 bufferedWriter.write(str);
+                bufferedWriter.newLine();
+                str = bufferedReader.readLine();
             }
             bufferedWriter.flush();
             bufferedWriter.close();
@@ -44,11 +54,30 @@ public class ScriptGenerator {
         return  file;
     }
 
-    public String matchingParam(String str, Map<String , String> parameter){
+    /**
+     * 匹配字符串中参数，将匹配参数替换
+     * @param str
+     * @param parameter
+     * @return
+     */
+    private String matchingParam(String str, Map<String , String> parameter){
 
-        String regx = "";
+        StringBuilder strBuilder = new StringBuilder(str);
+        Pattern pattern = Pattern.compile("[${]{1,}([a-zA-z0-9]-*){1,}[}]{1,}");
+        Matcher matcher = pattern.matcher(strBuilder);
 
-        return null;
+        while (matcher.find()){
+            String matcherKey = matcher.group();
+            matcherKey = matcherKey.replace("${", "");
+            matcherKey = matcherKey.replace("}", "");
+
+            String value = parameter.get(matcherKey);
+            strBuilder.replace(matcher.start(), matcher.end(), value);
+
+            matcher = pattern.matcher(strBuilder);
+        }
+
+        return strBuilder.toString();
     }
 
 

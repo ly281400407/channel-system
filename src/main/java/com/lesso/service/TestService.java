@@ -8,7 +8,7 @@ import com.lesso.pojo.User;
 import java.util.Map;
 
 public interface TestService {
-    
+    public void createDB();
     public void addDB(DataBaseInfo dataBaseInfo);
     public User test();
     public TenantInfo getTenantInfo(String tenantAccount);

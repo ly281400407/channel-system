@@ -14,6 +14,24 @@ public class TenantInfo {
     private String companyName;
     private String phoneNo;
     private String dbAccount;
+    private String verificationCode;
+    private Integer status;
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public String getVerificationCode() {
+        return verificationCode;
+    }
+
+    public void setVerificationCode(String verificationCode) {
+        this.verificationCode = verificationCode;
+    }
 
     public String getDbAccount() {
         return dbAccount;

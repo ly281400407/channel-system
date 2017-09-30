@@ -50,7 +50,7 @@ public class AccountServiceImpl implements IAccountService {
                 if(serverInfos!=null && serverInfos.size()>0){
                     ServerInfo serverInfo=serverInfos.get(0);
                     tenant.setServerIp(serverInfo.getServerIp());
-                    tenant.setServerPort(serverInfo.getServertPort());
+                    tenant.setServerPort(serverInfo.getServerPort());
                     tenant.setDbName("qudao_"+tenant.getTenantAccount());
                     tenant.setDbAccount("qudao_"+tenant.getTenantAccount());
                     tenant.setDbPassword("qudao_"+tenant.getTenantPassword());
@@ -131,7 +131,7 @@ public class AccountServiceImpl implements IAccountService {
         user.setName(tenant.getTenantAccount());
         user.setPassword(tenant.getTenantPassword());
         user.setCompanyName(tenant.getCompanyName());
-        user.setSex(1);
+        /*user.setSex(1);*/
         user.setTenantId(tenant.getId());
         this.userMapper.insertUser(user);
 
@@ -163,7 +163,7 @@ public class AccountServiceImpl implements IAccountService {
         Map<String,Object> resultMap=new HashMap<>();
         User user1=this.userMapper.getUserInfo(user);
         if(user1!=null && user1.getId()!=null){
-            user1.setDbName(user.getDbName());
+            /*user1.setDbName(user.getDbName());*/
             resultMap.put("islogin",true);
             resultMap.put("user",user1);
             resultMap.put("msg","login successlly");
