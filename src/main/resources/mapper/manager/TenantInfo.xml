@@ -14,7 +14,7 @@
 
     <select id="getTenantByIdOrName" resultType="com.lesso.pojo.TenantInfo">
         select id,tenantAccount as tenantAccount,tenantPassword,serverIp,serverPort as serverPort,dbName,dbAccount as dbAccount,dbPassword,companyName,phoneNo
-        from QDTenantInfo t where id= #{tenantId}  and tenantAccount = #{tenantAccount}
+        from QDTenantInfo t where  tenantAccount = #{tenantAccount}  limit 1
     </select>
 
     <update id="updateTenantStatus">

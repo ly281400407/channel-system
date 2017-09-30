@@ -2,6 +2,7 @@ DROP TABLE IF EXISTS `User`;
 CREATE TABLE `User` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `username` varchar(20)  NOT NULL DEFAULT '' COMMENT '用户账号',
+  `tenantAccount` varchar(20)  NOT NULL DEFAULT '' COMMENT '租户账号',
   `password` varchar(50)  NOT NULL DEFAULT '' COMMENT '密码',
   `userType` tinyint(2)  NOT NULL DEFAULT '0' COMMENT '用户类型-1商户-2商户员工',
   `phoneNo` varchar(200)  COMMENT '手机号码',
@@ -13,6 +14,9 @@ CREATE TABLE `User` (
   `departmentName` varchar(50)   COMMENT '部门名称',
   `placeOfOrigin` varchar(50)  COMMENT '籍贯',
   `address` varchar(50) COMMENT '地址',
+  `province` varchar(50) COMMENT '地址',
+  `city` varchar(50) COMMENT '地址',
+  `county` varchar(50) COMMENT '地址',
   `abbreviation` varchar(50) COMMENT '拼音简称',
   `entryTime` datetime COMMENT '入职时间',
   `quitTime` datetime COMMENT '离职时间',

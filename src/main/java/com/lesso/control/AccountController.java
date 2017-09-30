@@ -55,7 +55,7 @@ public class AccountController {
     @RequestMapping(value = "/tenant",method = RequestMethod.PUT)//method = RequestMethod.PUT
     @ResponseBody
     public Map updateTenantInfo(HttpServletRequest request, HttpServletResponse response) throws TokenException {
-        String tenantId=request.getParameter("tenantId");
+        //String tenantId=request.getParameter("tenantId");
         String tenantAccount=request.getParameter("tenantAccount");
         String companyName=request.getParameter("companyName");
         String province=request.getParameter("province");
@@ -66,7 +66,7 @@ public class AccountController {
         String email= request.getParameter("email");
 
         User user = new User();
-        user.setTenantId(Integer.valueOf(tenantId));
+       // user.setTenantId(Integer.valueOf(tenantId));
         user.setTenantAccount(tenantAccount);
         user.setUsername(tenantAccount);
         user.setCompanyName(companyName);
@@ -78,7 +78,6 @@ public class AccountController {
 
         AdminUser user1= new AdminUser();
         user1.setUserType(Long.valueOf(tenantType));
-        user1.setId(Integer.valueOf(tenantId));
         user1.setUsername(tenantAccount);
 
         Map<String,Object> resultMap=new HashMap<>();

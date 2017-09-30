@@ -1,5 +1,6 @@
 package com.lesso.service.impl;
 
+import com.lesso.common.db.AbstractUserDbCreator;
 import com.lesso.common.db.DataSourceHolder;
 import com.lesso.common.util.DataBaseUtil;
 import com.lesso.common.util.UUIDUtil;
@@ -79,24 +80,24 @@ public class AccountServiceImpl implements IAccountService {
                return resultMap;
             }
 
-            List<ServerInfo> serverInfos= serverInfoMapper.getRegisterServerInfo();
-
-            if(serverInfos!=null && serverInfos.size()>0){
-                    ServerInfo serverInfo=serverInfos.get(0);
-                    tenant.setServerIp(serverInfo.getServerIp());
-                    tenant.setServerPort(serverInfo.getServerPort());
-                    tenant.setDbName("qudao_"+tenant.getTenantAccount());
-                    tenant.setDbAccount("qudao_"+tenant.getTenantAccount());
-                    tenant.setDbPassword("qudao_"+tenant.getTenantPassword());
-                    tenant.setCompanyName("");
-                    Date date=new Date();
-                    tenant.setCreated(date);
-                    tenant.setUpdated(date);
-                    tenant.setStatus(2);
-                    //保存租户服务器信息
-                    serverInfoMapper.insertTenantInfo(tenant);
+//            List<ServerInfo> serverInfos= serverInfoMapper.getRegisterServerInfo();
+//
+//            if(serverInfos!=null && serverInfos.size()>0){
+//                    ServerInfo serverInfo=serverInfos.get(0);
+//                    tenant.setServerIp(serverInfo.getServerIp());
+//                    tenant.setServerPort(serverInfo.getServerPort());
+//                    tenant.setDbName("qudao_"+tenant.getTenantAccount());
+//                    tenant.setDbAccount("qudao_"+tenant.getTenantAccount());
+//                    tenant.setDbPassword("qudao_"+tenant.getTenantPassword());
+//                    tenant.setCompanyName("");
+//                    Date date=new Date();
+//                    tenant.setCreated(date);
+//                    tenant.setUpdated(date);
+//                    tenant.setStatus(2);
+//                    //保存租户服务器信息
+//                    serverInfoMapper.insertTenantInfo(tenant);
                     //更新业务服务器租户信息
-                    serverInfoMapper.updateQDServerInfo(serverInfo.getServerIp());
+ //                   serverInfoMapper.updateQDServerInfo(serverInfo.getServerIp());
                      AdminUser user= new AdminUser();
                      user.setPhoneNo(tenant.getPhoneNo());
                      Date now =new Date();
@@ -112,10 +113,10 @@ public class AccountServiceImpl implements IAccountService {
                      serverInfoMapper.insertUser(user);
                     resultMap.put("msg","您的账号注册成功");
                     resultMap.put("isCreateSuccess",true);
-            }else{
-                    resultMap.put("msg","服务器用户量超量，请稍后再试");
-                    resultMap.put("isCreateSuccess",false);
-            }
+//            }else{
+//                    resultMap.put("msg","服务器用户量超量，请稍后再试");
+//                    resultMap.put("isCreateSuccess",false);
+//            }
 
         }else{
             tenant=new TenantInfo();
@@ -154,78 +155,113 @@ public class AccountServiceImpl implements IAccountService {
 
 
 
+    @Autowired
+    private AbstractUserDbCreator userDbCreator;
+//    @Override
+//    public Map createUserDB(AdminUser adminUser,User user) {
+//        Map<String,Object> resultMap=new HashMap<>();
+//
+//        DataSourceHolder.setDataSource(null);
+//
+//        TenantInfo tenant= this.tenantInfoMapper.getTenantByIdOrName(user.getTenantId(),user.getTenantAccount());
+//
+//        //创建数据库操作
+//        DataSourceHolder.setDataSource(DataBaseUtil.getRootOfBusinessDB(tenant.getServerIp()));
+//        Map<String,Object> map=new HashMap<>();
+//        String creatDB="create database "+tenant.getDbName();
+//        map.put("sql",creatDB);
+//        this.serverInfoMapper.executeCreateQuery(map);
+//        String creatUser="create user '"+tenant.getDbAccount()+"'@'%' identified by '"+tenant.getDbPassword()+"'";
+//        map.put("sql",creatUser);
+//        this.serverInfoMapper.executeCreateQuery(map);
+//
+//        String grantUser="grant select,insert,update,delete,create on "+tenant.getDbName()+".* to "+tenant.getDbAccount();
+//        map.put("sql",grantUser);
+//        this.serverInfoMapper.executeCreateQuery(map);
+//
+//        map.put("sql","flush  privileges");
+//        this.serverInfoMapper.executeCreateQuery(map);
+//
+//
+//        DataSourceHolder.setDataSource(null);
+//        //激活租户用户
+//        adminUser.setStatus(1);
+//        this.serverInfoMapper.updateAdminUserStatus(adminUser);
+//        //激活租户数据库
+//        tenant.setStatus(1);
+//        this.tenantInfoMapper.updateTenantStatus(tenant);
+//
+//
+//        DataSourceHolder.setDataSource(tenant.getDbName());
+//
+//        String createTable= "CREATE TABLE IF NOT EXISTS  `User` (\n" +
+//                "  `id` int(10) NOT NULL AUTO_INCREMENT,\n" +
+//                "  `tenantAccount` varchar(20) NOT NULL DEFAULT '' COMMENT '租户账号',\n" +
+//                "  `username` varchar(20)  NOT NULL DEFAULT '' COMMENT '用户账号',\n" +
+//                "  `password` varchar(50)  NOT NULL DEFAULT '' COMMENT '密码',\n" +
+//                "  `userType` tinyint(2)  NOT NULL DEFAULT '0' COMMENT '用户类型-1商户-2商户员工',\n" +
+//                "  `phoneNo` varchar(200)  COMMENT '手机号码',\n" +
+//                "  `email` varchar(50)   COMMENT '邮箱',\n" +
+//                "  `name` varchar(15)   COMMENT '姓名',\n" +
+//                "  `birthday` datetime  COMMENT '生日',\n" +
+//                "  `idNo` varchar(18)   COMMENT '身份证',\n" +
+//                "  `companyName` varchar(15)  COMMENT '公司名',\n" +
+//                "  `departmentNo` varchar(15)  COMMENT '部门编号',\n" +
+//                "  `departmentName` varchar(50)   COMMENT '部门名称',\n" +
+//                "  `placeOfOrigin` varchar(50)  COMMENT '籍贯',\n" +
+//                "  `province` varchar(50) COMMENT '地址',\n" +
+//                "  `city` varchar(50) COMMENT '地址',\n" +
+//                "  `county` varchar(50) COMMENT '地址',\n" +
+//                "  `address` varchar(50) COMMENT '地址',\n" +
+//                "  `abbreviation` varchar(50) COMMENT '拼音简称',\n" +
+//                "  `entryTime` datetime COMMENT '入职时间',\n" +
+//                "  `quitTime` datetime COMMENT '离职时间',\n" +
+//                "  `registerTime` datetime NOT NULL COMMENT '注册时间',\n" +
+//                "  `lastLoginTime` datetime COMMENT '最后一次登录时间' ,\n" +
+//                "  `createTime` datetime NOT NULL COMMENT '创建时间',\n" +
+//                "  `updateTime` datetime NOT NULL COMMENT '更新时间',\n" +
+//                "  `delflag` int NOT NULL DEFAULT '1' COMMENT '删除标志',\n" +
+//                "  PRIMARY KEY (`id`)\n" +
+//                ") ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=utf8mb4;";
+//
+//        map.put("sql",createTable);
+//        this.serverInfoMapper.executeCreateQuery(map);
+//
+//        Date now = new Date();
+//        user.setPassword(tenant.getTenantPassword());
+//        user.setLastLoginTime(now);
+//        user.setCreateTime(now);
+//        user.setRegisterTime(now);
+//        user.setLastLoginTime(now);
+//        user.setUserType(1L);
+//        user.setDelflag(0);
+//        user.setPhoneNo(tenant.getPhoneNo());
+//
+//        user.setCreateTime(now);
+//        user.setUpdateTime(now);
+//
+//        //保存租户的信息保存到业务用户表中
+//        this.userMapper.insertUser(user);
+//        resultMap.put("dbName",tenant.getDbName());
+//        resultMap.put("user",user);
+//        resultMap.put("msg","完善用户信息成功");
+//
+//        return resultMap;
+//    }
 
     @Override
     public Map createUserDB(AdminUser adminUser,User user) {
         Map<String,Object> resultMap=new HashMap<>();
 
-
         DataSourceHolder.setDataSource(null);
+
+       AdminUser adminUser1=this.serverInfoMapper.getUserDBByName(adminUser);
+
+        userDbCreator.createTenantDb(adminUser1);
+
 
         TenantInfo tenant= this.tenantInfoMapper.getTenantByIdOrName(user.getTenantId(),user.getTenantAccount());
-
-        //创建数据库操作
-        DataSourceHolder.setDataSource(DataBaseUtil.getRootOfBusinessDB(tenant.getServerIp()));
-        Map<String,Object> map=new HashMap<>();
-        String creatDB="create database "+tenant.getDbName();
-        map.put("sql",creatDB);
-        this.serverInfoMapper.executeCreateQuery(map);
-        String creatUser="create user '"+tenant.getDbAccount()+"'@'%' identified by '"+tenant.getDbPassword()+"'";
-        map.put("sql",creatUser);
-        this.serverInfoMapper.executeCreateQuery(map);
-
-        String grantUser="grant select,insert,update,delete,create on "+tenant.getDbName()+".* to "+tenant.getDbAccount();
-        map.put("sql",grantUser);
-        this.serverInfoMapper.executeCreateQuery(map);
-
-        map.put("sql","flush  privileges");
-        this.serverInfoMapper.executeCreateQuery(map);
-
-
-        DataSourceHolder.setDataSource(null);
-        //激活租户用户
-        adminUser.setStatus(1);
-        this.serverInfoMapper.updateAdminUserStatus(adminUser);
-        //激活租户数据库
-        tenant.setStatus(1);
-        this.tenantInfoMapper.updateTenantStatus(tenant);
-
-
         DataSourceHolder.setDataSource(tenant.getDbName());
-
-        String createTable= "CREATE TABLE IF NOT EXISTS  `User` (\n" +
-                "  `id` int(10) NOT NULL AUTO_INCREMENT,\n" +
-                "  `tenantAccount` varchar(20) NOT NULL DEFAULT '' COMMENT '租户账号',\n" +
-                "  `username` varchar(20)  NOT NULL DEFAULT '' COMMENT '用户账号',\n" +
-                "  `password` varchar(50)  NOT NULL DEFAULT '' COMMENT '密码',\n" +
-                "  `userType` tinyint(2)  NOT NULL DEFAULT '0' COMMENT '用户类型-1商户-2商户员工',\n" +
-                "  `phoneNo` varchar(200)  COMMENT '手机号码',\n" +
-                "  `email` varchar(50)   COMMENT '邮箱',\n" +
-                "  `name` varchar(15)   COMMENT '姓名',\n" +
-                "  `birthday` datetime  COMMENT '生日',\n" +
-                "  `idNo` varchar(18)   COMMENT '身份证',\n" +
-                "  `companyName` varchar(15)  COMMENT '公司名',\n" +
-                "  `departmentNo` varchar(15)  COMMENT '部门编号',\n" +
-                "  `departmentName` varchar(50)   COMMENT '部门名称',\n" +
-                "  `placeOfOrigin` varchar(50)  COMMENT '籍贯',\n" +
-                "  `province` varchar(50) COMMENT '地址',\n" +
-                "  `city` varchar(50) COMMENT '地址',\n" +
-                "  `county` varchar(50) COMMENT '地址',\n" +
-                "  `address` varchar(50) COMMENT '地址',\n" +
-                "  `abbreviation` varchar(50) COMMENT '拼音简称',\n" +
-                "  `entryTime` datetime COMMENT '入职时间',\n" +
-                "  `quitTime` datetime COMMENT '离职时间',\n" +
-                "  `registerTime` datetime NOT NULL COMMENT '注册时间',\n" +
-                "  `lastLoginTime` datetime COMMENT '最后一次登录时间' ,\n" +
-                "  `createTime` datetime NOT NULL COMMENT '创建时间',\n" +
-                "  `updateTime` datetime NOT NULL COMMENT '更新时间',\n" +
-                "  `delflag` int NOT NULL DEFAULT '1' COMMENT '删除标志',\n" +
-                "  PRIMARY KEY (`id`)\n" +
-                ") ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=utf8mb4;";
-
-        map.put("sql",createTable);
-        this.serverInfoMapper.executeCreateQuery(map);
-
         Date now = new Date();
         user.setPassword(tenant.getTenantPassword());
         user.setLastLoginTime(now);
@@ -235,10 +271,8 @@ public class AccountServiceImpl implements IAccountService {
         user.setUserType(1L);
         user.setDelflag(0);
         user.setPhoneNo(tenant.getPhoneNo());
-
         user.setCreateTime(now);
         user.setUpdateTime(now);
-
         //保存租户的信息保存到业务用户表中
         this.userMapper.insertUser(user);
         resultMap.put("dbName",tenant.getDbName());

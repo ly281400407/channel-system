@@ -26,6 +26,9 @@ public interface ServerInfoMapper {
 
     public int updateAdminUserStatus(AdminUser user);
 
+    public AdminUser getUserDBByName(AdminUser user);
+
+
     public int updateQDServerInfo(String ip);
 
     public TenantInfo getUserInfo(TenantInfo tenantInfo);
