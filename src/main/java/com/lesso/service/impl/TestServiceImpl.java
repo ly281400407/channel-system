@@ -354,7 +354,7 @@ public class TestServiceImpl implements TestService {
     {
         AdminUser user = new AdminUser();
         user.setUsername("liyouTenant");
-        user.setPassword("liyouTenant");
+        user.setPassword("liyouTenant-password");
         user.setPhoneNo("18520802618");
         userDbCreator.createTenantDb(user);
     }

@@ -27,8 +27,10 @@ public class DefaultUserDbCreator implements AbstractUserDbCreator{
         AdminUser user = (AdminUser) o;
         ServerInfo serverInfo = serverDistributor.distribution(user);
 
-        DBUtil dBUtil = new DBUtil();
-        dBUtil.createDataBase(serverInfo.getServerIp(), serverInfo.getServerPort(), serverInfo.getManagerUser(), serverInfo.getManagerPassword(), user.getUsername(), user.getUsername(), user.getPassword());
+        //创库
+        DBUtil.createDataBase(serverInfo.getServerIp(), serverInfo.getServerPort(), serverInfo.getManagerUser(), serverInfo.getManagerPassword(), user.getUsername(), user.getUsername(), user.getPassword());
+        //创表
+        DBUtil.createTenantTable(serverInfo.getServerIp(), serverInfo.getServerPort(), user.getUsername(), user.getPassword(), user.getUsername());
 
         //创建tenant租户信息
         StringBuilder sb = new StringBuilder("insert into QDTenantInfo(tenantAccount, tenantPassword, serverIp, serverPort, dbName, dbPassword, status, created, updated, phoneNo, dbAccount)");

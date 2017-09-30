@@ -14,22 +14,19 @@ import java.util.regex.Pattern;
 public class ScriptGenerator {
 
     /**
-     * 生成执行dll脚本
+     * 生成执行sql脚本
      * @param parameter
      * @return
      */
-    public File generatorScript(Map<String, String> parameter) throws IOException {
+    public File generatorScript(Map<String, String> parameter, String template) throws IOException {
 
         long systime = System.currentTimeMillis();
         String fileName = systime+".sql";
         File file = new File(fileName);
         file.createNewFile();
-        File file1 = new File("");
-        System.out.println(file1.getAbsolutePath());
-        //File template = new File("template/create-tenant.sql");
 
         try{
-            InputStream inputStream = Resources.getResourceAsStream("template/create-tenant.sql");
+            InputStream inputStream = Resources.getResourceAsStream(template);
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 

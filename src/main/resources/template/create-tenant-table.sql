@@ -1,0 +1,25 @@
+DROP TABLE IF EXISTS `User`;
+CREATE TABLE `User` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `username` varchar(20)  NOT NULL DEFAULT '' COMMENT '用户账号',
+  `password` varchar(50)  NOT NULL DEFAULT '' COMMENT '密码',
+  `userType` tinyint(2)  NOT NULL DEFAULT '0' COMMENT '用户类型-1商户-2商户员工',
+  `phoneNo` varchar(200)  COMMENT '手机号码',
+  `email` varchar(50)   COMMENT '邮箱',
+  `name` varchar(15)   COMMENT '姓名',
+  `birthday` datetime  COMMENT '生日',
+  `idNo` varchar(18)   COMMENT '身份证',
+  `departmentNo` varchar(15)  COMMENT '部门编号',
+  `departmentName` varchar(50)   COMMENT '部门名称',
+  `placeOfOrigin` varchar(50)  COMMENT '籍贯',
+  `address` varchar(50) COMMENT '地址',
+  `abbreviation` varchar(50) COMMENT '拼音简称',
+  `entryTime` datetime COMMENT '入职时间',
+  `quitTime` datetime COMMENT '离职时间',
+  `registerTime` datetime NOT NULL COMMENT '注册时间',
+  `lastLoginTime` datetime COMMENT '最后一次登录时间' ,
+  `createTime` datetime NOT NULL COMMENT '创建时间',
+  `updateTime` datetime NOT NULL COMMENT '更新时间',
+  `delflag` int NOT NULL DEFAULT '1' COMMENT '删除标志',
+  PRIMARY KEY (`id`)
+);
