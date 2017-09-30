@@ -38,7 +38,7 @@ public class DBUtil {
             parameter.put("dbName", dbName);
             parameter.put("username", user);
             parameter.put("password", userPass);
-            Connection conn = getConnection(ip, port, connectUser, connectPassword, dbName);
+            Connection conn = getConnection(ip, port, connectUser, connectPassword, "mysql");
             File file = scriptGenerator.generatorScript(parameter, "template/create-tenant-database.sql");
             runScript(file, conn);
         }catch (Exception e){
@@ -46,7 +46,7 @@ public class DBUtil {
             return false;
         }
 
-        return false;
+        return true;
 
     }
 
@@ -70,7 +70,7 @@ public class DBUtil {
             return false;
         }
 
-        return false;
+        return true;
     }
 
     /**
