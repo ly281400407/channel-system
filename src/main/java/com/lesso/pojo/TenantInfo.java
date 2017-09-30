@@ -18,6 +18,7 @@ public class TenantInfo {
     private String dbAccount;
     private String verificationCode;
     private Integer status;
+
     private Date created;
     private Date updated;
 

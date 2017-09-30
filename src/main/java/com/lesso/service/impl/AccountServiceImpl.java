@@ -235,7 +235,6 @@ public class AccountServiceImpl implements IAccountService {
 
         //保存租户的信息保存到业务用户表中
         this.userMapper.insertUser(user);
-
         resultMap.put("dbName",tenant.getDbName());
         resultMap.put("user",user);
         resultMap.put("msg","完善用户信息成功");

@@ -89,6 +89,7 @@ public class AccountController {
         }
         return resultMap;
     }
+
     //获取手机验证码   测试通过
     @IgnoreSecurity(val = true)
     @RequestMapping(value = "/verificationCode",method = RequestMethod.GET)
@@ -117,6 +118,7 @@ public class AccountController {
         User user=new User();
         user.setName(userName);
         user.setPassword(password);
+
         Map<String,Object> resultMap=new HashMap<>();
         resultMap.put("dbName",dbName);
         try{

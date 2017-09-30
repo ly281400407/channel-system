@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.lesso.common.util.PropertyUtil;
 import com.lesso.common.util.sms.request.SmsSendRequest;
 import com.lesso.common.util.sms.response.SmsSendResponse;
-import com.oracle.webservices.internal.api.message.PropertySet;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -12,7 +11,6 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Properties;
 
 /**
  *

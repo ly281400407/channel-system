@@ -45,7 +45,8 @@
     <!-- Jackson来提供JSON的序列化操作 -->
     <mvc:annotation-driven>
         <mvc:message-converters>
-            <beans:bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+            <beans:bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+            </beans:bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
 
@@ -55,6 +56,14 @@
         <beans:property name="tokenManager" ref="tokenManager"/>
         <beans:property name="tokenName" value="X-Token"/>
         <beans:property name="userName" value="X-User"/>
+    </beans:bean>
+
+    <!--数据库服务器分配者-->
+    <beans:bean id="serverDistributor" class="com.lesso.common.db.DefaultServerDistributor" ></beans:bean>
+
+    <!--用户库创建者-->
+    <beans:bean id="userDbCreator" class="com.lesso.common.db.DefaultUserDbCreator">
+        <beans:property name="serverDistributor" ref="serverDistributor"/>
     </beans:bean>
 
     <aop:config>

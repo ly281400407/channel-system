@@ -1,5 +1,6 @@
 package com.lesso.service.impl;
 
+import com.lesso.common.db.AbstractUserDbCreator;
 import com.lesso.common.db.DataBaseInfo;
 import com.lesso.common.db.DataSourceHolder;
 import com.lesso.common.util.FastDFSUtils;
@@ -7,10 +8,7 @@ import com.lesso.mapper.manager.FinanceMapper;
 import com.lesso.mapper.manager.ServerInfoMapper;
 import com.lesso.mapper.manager.TenantInfoMapper;
 import com.lesso.mapper.user.UserMapper;
-import com.lesso.pojo.Finance;
-import com.lesso.pojo.ServerInfo;
-import com.lesso.pojo.TenantInfo;
-import com.lesso.pojo.User;
+import com.lesso.pojo.*;
 import com.lesso.service.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +29,8 @@ public class TestServiceImpl implements TestService {
     private FinanceMapper financeMapper;
     @Autowired
     private TenantInfoMapper tenantInfoMapper;
+    @Autowired
+    private AbstractUserDbCreator userDbCreator;
 
     public User test() {
         User user=new User();
@@ -155,7 +155,6 @@ public class TestServiceImpl implements TestService {
         user.setName(tenant.getTenantAccount());
         user.setPassword(tenant.getTenantPassword());
         user.setCompanyName(tenant.getCompanyName());
-//        user.setSex(1);
         user.setTenantId(tenant.getId());
         this.userMapper.insertUser(user);
 
@@ -238,7 +237,6 @@ public class TestServiceImpl implements TestService {
         Map<String,Object> resultMap=new HashMap<>();
         User user1=this.userMapper.getUserInfo(user);
         if(user1!=null && user1.getId()!=null){
-            //user1.setDbName(user.getDbName());
             resultMap.put("islogin",true);
             resultMap.put("user",user1);
             resultMap.put("msg","login successlly");
@@ -253,7 +251,6 @@ public class TestServiceImpl implements TestService {
     @Override
     public Map getUserList(User user) {
         Map<String,Object> resultMap=new HashMap<>();
-       // user.setSearchText("%"+user.getSearchText()+"%");
        List<User> users=this.userMapper.getList(user);
         if(users!=null && users.size()>0){
             resultMap.put("users",users);
@@ -291,7 +288,6 @@ public class TestServiceImpl implements TestService {
     @Override
     public Map insertUserDifferentTable(User user) {
         String tableIndex=getRoundingTableIndex(user.getTenantId());
-       // user.setTableIndex(tableIndex);
        String sql="Create Table If Not Exists  `t_user"+tableIndex+"` ("  +
         "`id` int(11) NOT NULL AUTO_INCREMENT,\n" +
                 "  `name` varchar(255) DEFAULT NULL,\n" +
@@ -312,8 +308,6 @@ public class TestServiceImpl implements TestService {
     @Override
     public Map queryUserDifferentTable(User user) {
         String tableIndex=getRoundingTableIndex(user.getTenantId());
-//        user.setSearchText( "%"+user.getSearchText()+"%");
-//        user.setTableIndex(tableIndex);
         List<User> users=this.userMapper.getUserByTableIndex(user);
         Map<String,Object> resultMap=new HashMap<>();
         resultMap.put("msg","query user in different table successfully");
@@ -354,6 +348,16 @@ public class TestServiceImpl implements TestService {
         return ""+id%8;
     }
 
+
+    @Override
+    public void createDB()
+    {
+        AdminUser user = new AdminUser();
+        user.setUsername("liyouTenant");
+        user.setPassword("liyouTenant");
+        user.setPhoneNo("18520802618");
+        userDbCreator.createTenantDb(user);
+    }
 
     public void addDB(DataBaseInfo dataBaseInfo){
 /*        DynamicDataSource dynamicDataSource= SpringContextUtil.getBean("multipleDataSource");
