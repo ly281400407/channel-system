@@ -9,35 +9,38 @@
     </select>
 
     <select id="getRegisterServerInfo" resultType="com.lesso.pojo.ServerInfo">
-     select * from QDServerInfo t where tenant_maxcount>tenant_curcount order by tenant_curcount
+     select * from QDServerInfo t where tenantMaxcount>tenantCurcount order by tenantCurcount
     </select>
 
     <select id="getUserDBInfo" resultType="com.lesso.pojo.TenantInfo">
-        select id,tenant_Account as tenantAccount,tenantPassword,serverIp,servertPort as serverPort,dbName,db_Account as dbAccount,dbPassword,companyName,phoneNo
-        from QDTenantInfo t where companyName= #{companyName}
+        select id,tenantAccount as tenantAccount,tenantPassword,serverIp,servertPort as serverPort,dbName,dbAccount as dbAccount,dbPassword,companyName,phoneNo
+        from QDTenantInfo t where phoneNo= #{phoneNo}
     </select>
 
     <select id="getUserInfo" resultType="com.lesso.pojo.TenantInfo">
-        select id,tenant_Account as tenantAccount,tenantPassword,serverIp,servertPort as serverPort,dbName,db_Account as dbAccount,dbPassword,companyName,phoneNo
-        from QDTenantInfo t where tenant_Account= #{tenantAccount}  and tenantPassword = #{tenantPassword}
+        select id,tenantAccount as tenantAccount,tenantPassword,serverIp,servertPort as serverPort,dbName,dbAccount as dbAccount,dbPassword,companyName,phoneNo
+        from QDTenantInfo t where tenantAccount= #{tenantAccount}  and tenantPassword = #{tenantPassword}
     </select>
 
     <select id="getAllUser" resultType="com.lesso.pojo.TenantInfo">
-        select id,tenant_Account as tenantAccount,tenantPassword,serverIp,servertPort as serverPort,dbName,db_Account as dbAccount,dbPassword,companyName,phoneNo
+        select id,tenantAccount as tenantAccount,tenantPassword,serverIp,servertPort as serverPort,dbName,dbAccount as dbAccount,dbPassword,companyName,phoneNo
         from QDTenantInfo t
     </select>
 
-    <insert id="insertUser" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertTenantInfo" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO QDTenantInfo (
-        tenant_Account,
+        tenantAccount,
         tenantPassword,
         serverIp,
-        servertPort,
+        serverPort,
         dbName,
-        db_Account,
+        dbAccount,
         dbPassword,
         companyName,
-        phoneNo)
+        phoneNo,
+        status,
+        created,
+        updated)
         VALUES   (
         #{tenantAccount},
         #{tenantPassword},
@@ -47,7 +50,34 @@
         #{dbAccount},
         #{dbPassword},
         #{companyName},
-        #{phoneNo}
+        #{phoneNo},
+        #{status},
+        #{created},
+        #{updated}
+        )
+    </insert>
+
+    <insert id="insertUser" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO User (
+        username,
+        password,
+        phoneNo,
+        userType,
+        status,
+        lastLoginTime,
+        createTime,
+        updateTime,
+        delflag)
+        VALUES   (
+        #{username},
+        #{password},
+        #{phoneNo},
+        #{userType},
+        #{status},
+        #{lastLoginTime},
+        #{createTime},
+        #{updateTime},
+        #{delflag}
         )
     </insert>
 
@@ -55,8 +85,14 @@
 
     <update id="updateQDServerInfo">
         UPDATE QDServerInfo
-        SET tenant_curcount= tenant_curcount+1
+        SET tenantCurcount= tenantCurcount+1
         WHERE serverIp = #{serverIp};
+    </update>
+
+    <update id="updateAdminUserStatus">
+        UPDATE User
+        SET status=  #{status}
+        WHERE id = #{id} or username={username};
     </update>
 
 

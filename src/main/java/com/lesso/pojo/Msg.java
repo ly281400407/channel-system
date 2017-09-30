@@ -6,27 +6,63 @@ import java.util.Date;
  * Created by czx on 2017/9/28.
  */
 public class Msg {
-
-    private String phone;
-    private String tenantId;
+    private Integer id;
+    private String phoneNo;
+    private Integer type;
     private String verificationCode;
-    private Date createDate;
+    private Date invalidTime;
+    private Date createTime;
+    private Integer delflag;
 
-    public String getPhone() {
-        return phone;
+    public Integer getId() {
+        return id;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public String getTenantId() {
-        return tenantId;
+    public Integer getType() {
+        return type;
     }
 
-    public void setTenantId(String tenantId) {
-        this.tenantId = tenantId;
+    public void setType(Integer type) {
+        this.type = type;
     }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+
+    public Integer getDelflag() {
+        return delflag;
+    }
+
+    public void setDelflag(Integer delflag) {
+        this.delflag = delflag;
+    }
+
+    public String getPhoneNo() {
+        return phoneNo;
+    }
+
+    public void setPhoneNo(String phoneNo) {
+        this.phoneNo = phoneNo;
+    }
+
+    public Date getInvalidTime() {
+        return invalidTime;
+    }
+
+    public void setInvalidTime(Date invalidTime) {
+        this.invalidTime = invalidTime;
+    }
+
 
     public String getVerificationCode() {
         return verificationCode;
@@ -36,11 +72,4 @@ public class Msg {
         this.verificationCode = verificationCode;
     }
 
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
 }

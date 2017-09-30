@@ -9,6 +9,6 @@ import com.lesso.pojo.TenantInfo;
 public interface MsgMapper {
     public int insertMsg(Msg Mmg);
 
-    public int getMsg(int id);
+    public Msg getEffectiveMsg(Msg Mmg);
 
 }

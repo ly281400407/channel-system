@@ -181,7 +181,7 @@ public class TestController {
         User user=new User();
         user.setName(userName);
         user.setPassword(password);
-        user.setDbName(dbName);
+        //user.setDbName(dbName);
         Map<String,Object> resultMap=new HashMap<>();
         try{
             resultMap=this.testService.loginOfUser(user);
@@ -200,7 +200,7 @@ public class TestController {
         String searchText=request.getParameter("searchText");
         String tenantId=request.getParameter("tenantId");
         User user=new User();
-        user.setSearchText(searchText);
+        //user.setSearchText(searchText);
         user.setTenantId(Integer.valueOf(tenantId));
         try{
             resultMap=this.testService.getUserList(user);
@@ -235,9 +235,9 @@ public class TestController {
         User user=new User();
         user.setName(userName);
         user.setPassword(password);
-        user.setDbName(dbName);
+        //user.setDbName(dbName);
         user.setCompanyName(companyName);
-        user.setSex(1);
+        //user.setSex(1);
         user.setTenantId(Integer.valueOf(tenantId));
         Map<String,Object> resultMap=new HashMap<>();
         try{
@@ -261,7 +261,7 @@ public class TestController {
         User user=new User();
         user.setName(userName);
         user.setPassword(password);
-        user.setDbName(dbName);
+        //user.setDbName(dbName);
         user.setCompanyName(companyName);
         user.setTenantId(Integer.valueOf(tenantId));
         Map<String,Object> resultMap=new HashMap<>();
@@ -280,7 +280,7 @@ public class TestController {
         String tenantId=request.getParameter("tenantId");
         User user=new User();
         user.setTenantId(Integer.valueOf(tenantId));
-        user.setSearchText(searchText);
+        //user.setSearchText(searchText);
         Map<String,Object> resultMap=new HashMap<>();
         try{
             resultMap=this.testService.queryUserDifferentTable(user);
