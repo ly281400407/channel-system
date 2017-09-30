@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -329,6 +330,10 @@ public class AccountServiceImpl implements IAccountService {
 
             Date now = new Date();
             Date afterDate = new Date(now.getTime() + 300000);
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            System.out.println("当前时间：" + sdf.format(now));
+            System.out.println("当前时间：" + sdf.format(afterDate));
 
             msg.setCreateTime(now);
             msg.setInvalidTime(afterDate);
