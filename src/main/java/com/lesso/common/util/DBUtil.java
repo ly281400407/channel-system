@@ -32,7 +32,7 @@ public class DBUtil {
             Connection conn = getConnection(ip, port, connectUser, connectPassword, "mysql");
             File file = scriptGenerator.generatorScript(parameter, "template/recovery-tenant-database.sql");
             runScript(file, conn);
-
+            file.delete();
         }catch (Exception e){
             logger.error(e.getMessage());
         }
@@ -59,6 +59,7 @@ public class DBUtil {
             Connection conn = getConnection(ip, port, connectUser, connectPassword, "mysql");
             File file = scriptGenerator.generatorScript(parameter, "template/create-tenant-database.sql");
             runScript(file, conn);
+            file.delete();
         }catch (IOException e){
             logger.error(e.getMessage());
             throw e;
@@ -83,6 +84,7 @@ public class DBUtil {
             Connection conn = getConnection(ip, port, connectUser, connectPassword, dbName);
             File file = scriptGenerator.generatorScript(null, "template/create-tenant-table.sql");
             runScript(file, conn);
+            file.delete();
         }catch (Exception e){
             logger.error(e.getMessage());
             throw e;
