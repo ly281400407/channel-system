@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import java.io.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,6 +21,23 @@ public class DBUtil {
 
     private static ScriptGenerator scriptGenerator = new ScriptGenerator();
 
+    public static void recoveryTenant(String ip, int port, String connectUser, String connectPassword, String user, String dbName){
+
+        try {
+
+            Map<String, String> parameter = new HashMap<String, String>();
+            parameter.put("user", user);
+            parameter.put("dbName", dbName);
+
+            Connection conn = getConnection(ip, port, connectUser, connectPassword, "mysql");
+            File file = scriptGenerator.generatorScript(parameter, "template/recovery-tenant-database.sql");
+            runScript(file, conn);
+
+        }catch (Exception e){
+            logger.error(e.getMessage());
+        }
+    }
+
     /**
      * 创建新库
      * @param ip
@@ -31,7 +49,7 @@ public class DBUtil {
      * @param userPass
      * @return
      */
-    public static synchronized boolean createDataBase(String ip, int port, String connectUser, String connectPassword, String dbName, String user, String userPass){
+    public static synchronized void createDataBase(String ip, int port, String connectUser, String connectPassword, String dbName, String user, String userPass) throws IOException, SQLException {
 
         try {
             Map<String, String> parameter = new HashMap<String, String>();
@@ -41,12 +59,12 @@ public class DBUtil {
             Connection conn = getConnection(ip, port, connectUser, connectPassword, "mysql");
             File file = scriptGenerator.generatorScript(parameter, "template/create-tenant-database.sql");
             runScript(file, conn);
-        }catch (Exception e){
+        }catch (IOException e){
             logger.error(e.getMessage());
-            return false;
+            throw e;
         }
 
-        return true;
+
 
     }
 
@@ -59,7 +77,7 @@ public class DBUtil {
      * @param dbName
      * @return
      */
-    public static synchronized boolean createTenantTable(String ip, int port, String connectUser, String connectPassword, String dbName){
+    public static synchronized void createTenantTable(String ip, int port, String connectUser, String connectPassword, String dbName) throws IOException, SQLException {
 
         try {
             Connection conn = getConnection(ip, port, connectUser, connectPassword, dbName);
@@ -67,10 +85,8 @@ public class DBUtil {
             runScript(file, conn);
         }catch (Exception e){
             logger.error(e.getMessage());
-            return false;
+            throw e;
         }
-
-        return true;
     }
 
     /**
@@ -102,7 +118,8 @@ public class DBUtil {
 
     }
 
-    private static boolean runScript(File file, Connection conn){
+    private static void runScript(File file, Connection conn) throws IOException, SQLException {
+
         try {
             ScriptRunner runner = new ScriptRunner(conn, false, false);
             runner.setErrorLogWriter(null);
@@ -112,9 +129,8 @@ public class DBUtil {
             runner.runScript(inputStreamReader);
         }catch (Exception e ){
             logger.error(e.getMessage());
-            return false;
+            throw e;
         }
-        return true;
     }
 
 

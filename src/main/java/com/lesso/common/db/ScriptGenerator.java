@@ -1,6 +1,7 @@
 package com.lesso.common.db;
 
 import com.ibatis.common.resources.Resources;
+import org.apache.log4j.Logger;
 
 import java.io.*;
 import java.util.Map;
@@ -12,6 +13,8 @@ import java.util.regex.Pattern;
  * 生成用户建库脚本
  */
 public class ScriptGenerator {
+
+    private static Logger logger = Logger.getLogger(ScriptGenerator.class);
 
     /**
      * 生成执行sql脚本
@@ -44,8 +47,9 @@ public class ScriptGenerator {
             bufferedWriter.flush();
             bufferedWriter.close();
 
-        }catch (Exception e ){
-            e.printStackTrace();
+        }catch (IOException e ){
+            logger.error(e.getMessage());
+            throw e;
         }
 
         return  file;
