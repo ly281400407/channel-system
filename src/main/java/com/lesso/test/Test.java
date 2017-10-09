@@ -3,6 +3,7 @@ package com.lesso.test;
 import com.lesso.common.util.FastDFSUtils;
 import org.csource.common.MyException;
 import org.csource.fastdfs.*;
+import redis.clients.jedis.Jedis;
 
 import java.io.*;
 
@@ -31,6 +32,12 @@ public class Test {
 ////                        }
 //       // }
 //        storageClient.delete_file("group1","M00/00/00/wKiVh1nLV2aAaHpIprZ12TaSSys005.zip");
+
+        Jedis jedis= new Jedis("127.0.0.1",6379);
+        jedis.set("name","czx");
+        System.out.println(jedis.get("name"));
+        jedis.append("name", " is my lover"); //拼接
+        System.out.println(jedis.get("name"));
 
 
 
