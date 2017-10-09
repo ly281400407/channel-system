@@ -28,10 +28,14 @@ public interface ServerInfoMapper {
 
     public AdminUser getUserDBByName(AdminUser user);
 
+    public AdminUser getUserByPhone(AdminUser user);
+
 
     public int updateQDServerInfo(String ip);
 
     public TenantInfo getUserInfo(TenantInfo tenantInfo);
+
+    public AdminUser getAdminUser(AdminUser user);
 
     public List<TenantInfo> getAllUser();
 

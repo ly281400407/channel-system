@@ -21,9 +21,17 @@
         select * from User t where username= #{username} limit 1
     </select>
 
+    <select id="getUserByPhone" resultType="com.lesso.pojo.AdminUser">
+        select * from User t where phoneNo= #{phoneNo} limit 1
+    </select>
+
     <select id="getUserInfo" resultType="com.lesso.pojo.TenantInfo">
         select id,tenantAccount as tenantAccount,tenantPassword,serverIp,serverPort as serverPort,dbName,dbAccount as dbAccount,dbPassword,companyName,phoneNo
         from QDTenantInfo t where tenantAccount= #{tenantAccount}  and tenantPassword = #{tenantPassword}
+    </select>
+
+    <select id="getAdminUser" resultType="com.lesso.pojo.AdminUser">
+        select * from User t where username= #{username}  and password = #{password}
     </select>
 
     <select id="getAllUser" resultType="com.lesso.pojo.TenantInfo">
