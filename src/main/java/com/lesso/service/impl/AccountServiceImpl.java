@@ -44,10 +44,10 @@ public class AccountServiceImpl implements IAccountService {
        Map<String,Object> resultMap=new HashMap<>();
        Msg msg1=this.msgMapper.getEffectiveMsg(msg);
        if(msg1!=null && msg.getVerificationCode()!=null){
-           resultMap.put("isExist",true);
+           resultMap.put("isSuccess",true);
            resultMap.put("msg","该验证码正确");
        }else{
-           resultMap.put("isExist",false);
+           resultMap.put("isSuccess",false);
            resultMap.put("msg","该验证码错误或者已过失效！");
        }
        return resultMap;
@@ -61,14 +61,14 @@ public class AccountServiceImpl implements IAccountService {
         if(tenant!=null){
             //校验手机号是否重复
             resultMap=checkTenantPhoneUniqueness(tenant.getPhoneNo());
-            Boolean isExist=(Boolean)resultMap.get("isExist");
-            if(isExist){
+            Boolean isSuccess=(Boolean)resultMap.get("isSuccess");
+            if(!isSuccess){
                 return resultMap;
             }
             //校验用户名是否重复
             resultMap=checkTenantNameUniqueness(tenant.getTenantAccount());
-            Boolean isNameExist=(Boolean)resultMap.get("isExist");
-            if(isNameExist){
+            Boolean isNameExist=(Boolean)resultMap.get("isSuccess");
+            if(!isNameExist){
                 return resultMap;
             }
             //校验手机验证码正确和在有效期
@@ -76,7 +76,7 @@ public class AccountServiceImpl implements IAccountService {
             msg.setPhoneNo(tenant.getPhoneNo());
             msg.setVerificationCode(tenant.getVerificationCode());
             resultMap=checkVerificationCodePhone(msg);
-            Boolean msgFlag=(Boolean)resultMap.get("isExist");
+            Boolean msgFlag=(Boolean)resultMap.get("isSuccess");
             if(!msgFlag){
                return resultMap;
             }
@@ -113,7 +113,7 @@ public class AccountServiceImpl implements IAccountService {
                     //保存管理服务器用户信息
                      serverInfoMapper.insertUser(user);
                     resultMap.put("msg","您的账号注册成功");
-                    resultMap.put("isCreateSuccess",true);
+                    resultMap.put("isSuccess",true);
 //            }else{
 //                    resultMap.put("msg","服务器用户量超量，请稍后再试");
 //                    resultMap.put("isCreateSuccess",false);
@@ -122,7 +122,7 @@ public class AccountServiceImpl implements IAccountService {
         }else{
             tenant=new TenantInfo();
             resultMap.put("msg","您的注册信息丢失，请重新进行注册");
-            resultMap.put("isCreateSuccess",false);
+            resultMap.put("isSuccess",false);
         }
         resultMap.put("tenant",tenant);
         return resultMap;
@@ -130,12 +130,14 @@ public class AccountServiceImpl implements IAccountService {
 
     public Map checkTenantPhoneUniqueness(String phone){
         Map<String,Object> resultMap=new HashMap<>();
-      TenantInfo tenantInfo=this.tenantInfoMapper.getTenantByPhone(phone);
-        if(tenantInfo!=null && tenantInfo.getPhoneNo()!=null){
-            resultMap.put("isExist",true);
+        AdminUser user=new AdminUser();
+        user.setPhoneNo(phone);
+        AdminUser adminUser=this.serverInfoMapper.getUserDBByName(user);
+        if(adminUser!=null && adminUser.getPhoneNo()!=null){
+            resultMap.put("isSuccess",false);
             resultMap.put("msg","该手机号已被注册，请更换新号码重新注册");
         }else{
-            resultMap.put("isExist",false);
+            resultMap.put("isSuccess",true);
             resultMap.put("msg","该手机号可以进行注册");
         }
         return  resultMap;
@@ -143,12 +145,14 @@ public class AccountServiceImpl implements IAccountService {
 
     public Map checkTenantNameUniqueness(String tenantAccount){
         Map<String,Object> resultMap=new HashMap<>();
-        TenantInfo tenantInfo = tenantInfoMapper.getTenantByName(tenantAccount);
-        if(tenantInfo!=null && tenantInfo.getPhoneNo()!=null){
-            resultMap.put("isExist",true);
+        AdminUser user=new AdminUser();
+        user.setUsername(tenantAccount);
+        AdminUser adminUser=this.serverInfoMapper.getUserDBByName(user);
+        if(adminUser!=null && adminUser.getPhoneNo()!=null){
+            resultMap.put("isSuccess",false);
             resultMap.put("msg","该用户名已被注册，请更换新号码重新注册");
         }else{
-            resultMap.put("isExist",false);
+            resultMap.put("isSuccess",true);
             resultMap.put("msg","该用户名可以进行注册");
         }
         return  resultMap;
@@ -276,6 +280,7 @@ public class AccountServiceImpl implements IAccountService {
         user.setUpdateTime(now);
         //保存租户的信息保存到业务用户表中
         this.userMapper.insertUser(user);
+        resultMap.put("isSuccess",true);
         resultMap.put("dbName",tenant.getDbName());
         resultMap.put("user",user);
         resultMap.put("msg","完善用户信息成功");
@@ -286,17 +291,28 @@ public class AccountServiceImpl implements IAccountService {
     @Override
     public Map loginOfTenantInfo(TenantInfo tenant) {
         Map<String,Object> resultMap=new HashMap<>();
+
         TenantInfo tenantInfo=this.serverInfoMapper.getUserInfo(tenant);
 
         if(tenantInfo!=null && tenantInfo.getId()!=null){
-            resultMap.put("islogin",true);
+            resultMap.put("isSuccess",true);
             resultMap.put("tenant",tenant);
             resultMap.put("dbName",tenantInfo.getDbName());
             resultMap.put("msg","登录成功");
         }else{
-            resultMap.put("islogin",false);
-            resultMap.put("tenant",new TenantInfo());
-            resultMap.put("msg","登录失败");
+            AdminUser user=new AdminUser();
+            user.setUsername(tenant.getTenantAccount());
+            user.setPassword(tenant.getTenantPassword());
+            AdminUser user1=this.serverInfoMapper.getAdminUser(user);
+            if(user1!=null && user1.getId()!=null) {
+                resultMap.put("isSuccess",true);
+                resultMap.put("tenant",tenant);
+                resultMap.put("msg", "登录成功，请尽快完善租户信息");
+            }else{
+                resultMap.put("isSuccess", false);
+                resultMap.put("tenant", tenant);
+                resultMap.put("msg", "登录失败");
+            }
         }
         return resultMap;
     }
@@ -307,11 +323,11 @@ public class AccountServiceImpl implements IAccountService {
         Map<String,Object> resultMap=new HashMap<>();
         User user1=this.userMapper.getUserInfo(user);
         if(user1!=null && user1.getId()!=null){
-            resultMap.put("islogin",true);
+            resultMap.put("isSuccess",true);
             resultMap.put("user",user1);
             resultMap.put("msg","登录成功");
         }else{
-            resultMap.put("islogin",false);
+            resultMap.put("isSuccess",false);
             resultMap.put("user",user);
             resultMap.put("msg","登录失败");
         }
@@ -341,11 +357,11 @@ public class AccountServiceImpl implements IAccountService {
             msg.setType(0);
             msg.setDelflag(0);
             this.msgMapper.insertMsg(msg);
-            resultMap.put("isSend",true);
+            resultMap.put("isSuccess",true);
             resultMap.put("verificationCode",msg);
             resultMap.put("msg","发送验证码成功,请尽快填写");
         }else{
-            resultMap.put("isSend",false);
+            resultMap.put("isSuccess",false);
             resultMap.put("verificationCode",msg);
             resultMap.put("msg","发送验证码失败，请重新获取");
         }

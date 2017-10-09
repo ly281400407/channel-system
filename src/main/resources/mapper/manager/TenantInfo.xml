@@ -9,7 +9,7 @@
     </select>
 
     <select id="getTenantByPhone" resultType="com.lesso.pojo.TenantInfo">
-        select * from QDTenantInfo where phoneNo = #{phoneNo}
+        select * from QDTenantInfo where phoneNo = #{phoneNo} limit 1
     </select>
 
     <select id="getTenantByIdOrName" resultType="com.lesso.pojo.TenantInfo">

@@ -1,6 +1,7 @@
 package com.lesso.control;
 
 import com.lesso.common.exception.TokenException;
+import com.lesso.common.network.Response;
 import com.lesso.common.security.IgnoreSecurity;
 import com.lesso.pojo.AdminUser;
 import com.lesso.pojo.Msg;
@@ -31,7 +32,8 @@ public class AccountController {
     @IgnoreSecurity(val = true)
     @RequestMapping(value = "/tenant",method = RequestMethod.POST)//method = RequestMethod.POST
     @ResponseBody
-    public Map register(HttpServletRequest request, HttpServletResponse response) throws TokenException {
+    public Response register(HttpServletRequest request, HttpServletResponse response) throws TokenException {
+        Response responseResult=new Response();
         String userName=request.getParameter("accountName");
         String password=request.getParameter("pwd");
         String phone=request.getParameter("phone");
@@ -44,17 +46,25 @@ public class AccountController {
         Map<String,Object> resultMap=new HashMap<>();
         try{
             resultMap=this.accountService.createUserInfo(tenantInfo);
+            Boolean success=(Boolean) resultMap.get("isSuccess");
+            if(success!=null&&success){
+                responseResult.success(resultMap);
+            }else{
+                responseResult.failure((String)resultMap.get("msg"));
+            }
         }catch (Exception e){
             e.printStackTrace();
+            responseResult.failure();
         }
-        return resultMap;
+        return responseResult;
     }
 
     //完善租户信息
     @IgnoreSecurity(val = true)
     @RequestMapping(value = "/tenant",method = RequestMethod.PUT)//method = RequestMethod.PUT
     @ResponseBody
-    public Map updateTenantInfo(HttpServletRequest request, HttpServletResponse response) throws TokenException {
+    public Response updateTenantInfo(HttpServletRequest request, HttpServletResponse response) throws TokenException {
+        Response responseResult=new Response();
         //String tenantId=request.getParameter("tenantId");
         String tenantAccount=request.getParameter("tenantAccount");
         String companyName=request.getParameter("companyName");
@@ -83,34 +93,50 @@ public class AccountController {
         Map<String,Object> resultMap=new HashMap<>();
         try{
             resultMap=this.accountService.createUserDB(user1,user);
+            Boolean success=(Boolean) resultMap.get("isSuccess");
+            if(success!=null&&success){
+                responseResult.success(resultMap);
+            }else{
+                responseResult.failure((String)resultMap.get("msg"));
+            }
         }catch (Exception e){
             e.printStackTrace();
+            responseResult.failure();
         }
-        return resultMap;
+        return responseResult;
     }
 
     //获取手机验证码   测试通过
     @IgnoreSecurity(val = true)
     @RequestMapping(value = "/verificationCode",method = RequestMethod.GET)
     @ResponseBody
-    public Map getVerificationCode(HttpServletRequest request, HttpServletResponse response) throws TokenException {
+    public Response getVerificationCode(HttpServletRequest request, HttpServletResponse response) throws TokenException {
+        Response responseResult=new Response();
         String phone=request.getParameter("phone");
         Msg msg=new Msg();
         msg.setPhoneNo(phone);
         Map<String,Object> resultMap=new HashMap<>();
         try{
             resultMap=this.accountService.getVerificationCode(msg);
+            Boolean success=(Boolean) resultMap.get("isSuccess");
+            if(success!=null&&success){
+                responseResult.success(resultMap);
+            }else{
+                responseResult.failure((String)resultMap.get("msg"));
+            }
         }catch (Exception e){
             e.printStackTrace();
+            responseResult.failure();
         }
-        return resultMap;
+        return responseResult;
     }
 
     //用户登录
     @IgnoreSecurity(val = true)
     @RequestMapping(value = "/user", method = RequestMethod.GET)
     @ResponseBody
-    public Map loginOfUser(HttpServletRequest request, HttpServletResponse response) throws TokenException {
+    public Response loginOfUser(HttpServletRequest request, HttpServletResponse response) throws TokenException {
+        Response responseResult=new Response();
         String userName=request.getParameter("userName");
         String password=request.getParameter("password");
         String dbName=request.getParameter("dbName");
@@ -122,17 +148,25 @@ public class AccountController {
         resultMap.put("dbName",dbName);
         try{
             resultMap=this.accountService.loginOfUser(user);
+            Boolean success=(Boolean) resultMap.get("isSuccess");
+            if(success!=null&&success){
+                responseResult.success(resultMap);
+            }else{
+                responseResult.failure((String)resultMap.get("msg"));
+            }
         }catch (Exception e){
             e.printStackTrace();
+            responseResult.failure();
         }
-        return resultMap;
+        return responseResult;
     }
 
     //租户登录
     @IgnoreSecurity(val = true)
     @RequestMapping(value = "/tenant",method = RequestMethod.GET)
     @ResponseBody
-    public Map loginOfTenantInfo(HttpServletRequest request, HttpServletResponse response) throws TokenException {
+    public Response loginOfTenantInfo(HttpServletRequest request, HttpServletResponse response) throws TokenException {
+        Response responseResult=new Response();
         String userName=request.getParameter("userName");
         String password=request.getParameter("password");
         TenantInfo tenantInfo=new TenantInfo();
@@ -141,10 +175,17 @@ public class AccountController {
         Map<String,Object> resultMap=new HashMap<>();
         try{
             resultMap=this.accountService.loginOfTenantInfo(tenantInfo);
+            Boolean success=(Boolean) resultMap.get("isSuccess");
+            if(success!=null&&success){
+                responseResult.success(resultMap);
+            }else{
+                responseResult.failure((String)resultMap.get("msg"));
+            }
         }catch (Exception e){
             e.printStackTrace();
+            responseResult.failure();
         }
-        return resultMap;
+        return responseResult;
     }
 
 }
