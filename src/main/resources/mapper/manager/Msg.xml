@@ -23,7 +23,7 @@
     </insert>
 
     <select id="getEffectiveMsg" resultType="com.lesso.pojo.Msg">
-        select * from VerificationCode t where t.phoneNo= #{phoneNo} and t.verificationCode= #{verificationCode} and t.invalidTime >= NOW()
+        select * from VerificationCode t where t.phoneNo= #{phoneNo} and t.verificationCode= #{verificationCode} and t.invalidTime >= NOW() limit 1
     </select>
 
 

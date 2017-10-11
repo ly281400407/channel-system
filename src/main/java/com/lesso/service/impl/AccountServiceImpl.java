@@ -43,7 +43,7 @@ public class AccountServiceImpl implements IAccountService {
    public Map checkVerificationCodePhone(Msg msg){
        Map<String,Object> resultMap=new HashMap<>();
        Msg msg1=this.msgMapper.getEffectiveMsg(msg);
-       if(msg1!=null && msg.getVerificationCode()!=null){
+       if(msg1!=null && msg1.getVerificationCode()!=null){
            resultMap.put("isSuccess",true);
            resultMap.put("msg","该验证码正确");
        }else{
